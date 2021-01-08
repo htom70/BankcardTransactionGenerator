@@ -1,0 +1,267 @@
+yearNumber: 2018
+userNumber: 1000
+foreignToDomesticTransactionRate: 2.5
+limitRateToNormalMonth: 1.5
+
+retiredUseCard:
+  boundary: 200 # véletlenszámgenerátor 0-1000 között dolgozik, 0-200, azaz 20 % kártyahasználó nyugdíjas
+  minIncome: 80000
+  averageIncome: 135000
+  maxIncome: 300000
+  limitRateToIncome: #kiadások aránya a fizetéshez
+    Min: 0.8
+    Max: 1
+  limitRateToIncomeInChristmasPeriod: 1.5
+
+  firstTypeForeignCountryJourney:
+    entityRate: 0.02
+    dayNumber:
+      Min: 7
+      Max: 14
+    countryList: GR,HR,SP,IT,AT,SK,DE
+  Pos:
+    daily:
+      occasion:
+        Min: 2
+        Max: 3
+      amount:
+        Min: 2000
+        Max: 10000
+      storeNumber:
+        Max: 2
+    saturday:
+      amount:
+        Min: 10000
+        Max: 15000
+      storeNumber:
+        Min: 3
+        Max: 4
+    christmasPeriod:
+      beginDay: 10
+      daily:
+        occasion:
+          Min: 2
+          Max: 5
+        amount:
+          Min: 2000
+          Max: 25000
+  ATM:
+    monthly:
+      occasion:
+        Min: 4
+        Max: 8
+      amount:
+        Min: 5000
+        Max: 10000
+##########################################################################
+retiredDontUseCard:
+  boundary: 300 # 200-299 között, azaz 10 % kártyát nem használó nyugdíjas
+  minIncome: 80000
+  averageIncome: 135000
+  maxIncome: 300000
+  limitRateToIncome: #kiadások aránya a fizetéshez
+    Min: 0.8
+    Max: 1
+  limitRateToIncomeInChristmasPeriod: 1.5
+  ATM:
+    monthly:
+      transactionDate:
+        Min: 10
+        Max: 13
+      amount:
+        Min: 150000
+        Max: 300000
+###########################################################################
+ordinaryUserUseCardAndInternet:
+  boundary: 529 # 300-529, azaz 22,9 %
+  minIncome: 80000
+  averageIncome: 135000
+  maxIncome: 300000
+  limitRateToIncome: #kiadások aránya a fizetéshez
+    Min: 0.8
+    Max: 1
+  limitRateToIncomeInChristmasPeriod: 1.5
+  firstTypeForeignCountryJourney:
+    entityRate: 0.02
+    dayNumber:
+      Min: 7
+      Max: 14
+    countryList: GR,HR,SP,IT,AT,SK,DE
+  secondTypeForeignCountryJourney:
+    entityRate: 0.05
+    dayNumber:
+      Min: 1
+      Max: 2
+    occasion:
+      Min: 4
+      Max: 10
+    countryList: HR,AT,SK,DE,Pl,RO
+  Pos:
+    daily:
+      Number:
+        Min: 2
+        Max: 10
+      amount:
+        Min: 1000
+        Max: 15000
+    christmasPeriod:
+      beginDay: 10
+      daily:
+        occasion:
+          Min: 2
+          Max: 5
+        amount:
+          Min: 2000
+          Max: 25000
+
+  ATMtransaction:
+    monthly:
+      occasion:
+        Max: 5
+      amount:
+        Min: 5000
+        Max: 50000
+  net:
+    monthly:
+      occasion::
+        Min: 2
+        Max: 4
+      amount:
+        Min: 5000
+        Max: 50000
+    monthlyDecember:
+      occasion:
+        Min: 10
+        Max: 15
+      amount:
+        Min: 2000
+        Max: 40000
+
+###################################################################
+ordinaryUserUseCardDontUseInternet:
+  boundary: 899
+  minIncome: 170000
+  averageIncome: 270000
+  maxIncome: 370000
+  limitRateToIncome: #kiadások aránya a fizetéshez
+    Min: 0.8
+    Max: 1
+  limitRateToIncomeInChristmasPeriod: 1.5
+  firstTypeForeignCountryJourney:
+    entityRate: 0.02
+    dayNumber:
+      Min: 7
+      Max: 14
+    countryList: GR,HR,SP,IT,AT,SK,DE
+  secondTypeForeignCountryJourney:
+    entityRate: 0.05
+    dayNumber:
+      Min: 1
+      Max: 2
+    occasion:
+      Min: 4
+      Max: 10
+    countryList: HR,AT,SK,DE,Pl,RO
+  Pos:
+    daily:
+      Number:
+        Min: 2
+        Max: 10
+      amount:
+        Min: 1000
+        Max: 25000
+    yearly:
+      number:
+        Min: 0
+        Max: 4
+      amount:
+        Min: 100000
+        Max: 400000
+    christmasPeriod:
+      beginDay: 10
+      daily:
+        occasion:
+          Min: 2
+          Max: 5
+        amount:
+          Min: 2000
+          Max: 15000
+
+  ATMtransaction:
+    monthly:
+      occasion:
+        Max: 5
+      amount:
+        Min: 5000
+        Max: 50000
+
+###################################################
+ordinaryUserDontUseCard:
+  boundary: 999
+  minIncome: 100000
+  maxIncome: 270000
+  limitRateToIncome: #kiadások aránya a fizetéshez
+    Min: 0.8
+    Max: 1
+  limitRateToIncomeInChristmasPeriod: 1.5
+  firstTypeForeignCountryJourney:
+    entityRate: 0.02
+    dayNumber:
+      Min: 1
+      Max: 2
+    countryList: GR,HR,SP,IT,AT,SK,DE
+  Pos:
+    monthly:
+      occasion:
+        Min:
+        Max: 5
+      amount:
+        Min: 2000
+        Max: 10000
+    yearly:
+      occasion:
+        Max: 4
+      amount:
+        Min: 100000
+        Max: 400000
+
+  ATM:
+    yearly:
+      occasion:
+        Min: 2
+        Max: 3
+      amount:
+        Min: 100000
+        Max: 300000
+    firstTypeCashWithDrawalForeignCountry:
+      entityRate: 0.02
+      weekNumber:
+        Min: 1
+        Max: 2
+      countryList: GR,HR,SP,IT,AT,SK
+      limitRate: 1.5
+
+ ####################################################
+vipUser:
+  boundary: 1000
+  minIncome: 800000
+  maxIncome: 1000000
+  PosPurchase:
+    firstTypeForeignCountryJourney:
+      entityRate: 1
+      weekNumber:
+        Min: 1
+        Max: 2
+      limitRate: 1.5
+    secondTypeForeignCountryJourney:
+      entityRate: 0.1
+      yearly:
+        dayNumber:
+          Min: 1
+          Max: 3
+        occasion:
+          Min: 5
+          Max: 10
+        countryList: HR,AT,SK,DE,Pl,RO
+      limitRate: 1.5
+
