@@ -11,10 +11,12 @@ import user.card.generator.domain.country.City;
 import user.card.generator.domain.country.Country;
 import user.card.generator.domain.country.Vendor;
 import user.card.generator.domain.field.FieldGenerator;
+import user.card.generator.domain.name.WomanName;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -115,7 +117,7 @@ public class Transaction {
         if (rate < 40) {
             setField5(fieldGenerator.generateFromZeroToOne(random));
         }
-        rate = random.nextInt(20);
+        rate = random.nextInt(100);
         if (rate < 20) {
             setField6(fieldGenerator.generateFromZeroToOne(random));
         }
@@ -195,7 +197,9 @@ public class Transaction {
         }
         rate = random.nextInt(100);
         if (rate < 80) {
-            setField30(fieldGenerator.generateWomanLastName(random));
+            if (checkIfField26containsAWomanName()) {
+                setField30(fieldGenerator.generateWomanLastName(random));
+            }
         }
         setField31(fieldGenerator.generateCityName(random,cities));
         rate = random.nextInt(100);
@@ -216,5 +220,15 @@ public class Transaction {
         if (rate < 50) {
             setField40(fieldGenerator.generateDate(random, LocalDate.of(2020, 1, 1), LocalDate.of(2020, 12, 31)));
         }
+    }
+
+    private boolean checkIfField26containsAWomanName() {
+        WomanName[] names = WomanName.values();
+        List<String> nameCollection = new ArrayList<>();
+        for (int i = 0; i <names.length ; i++) {
+            String name = names[i].toString();
+            nameCollection.add(name);
+        }
+        return nameCollection.contains(field26);
     }
 }
