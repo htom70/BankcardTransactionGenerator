@@ -6,11 +6,13 @@ import org.springframework.stereotype.Service;
 import user.card.generator.domain.AtmOwnerBank;
 import user.card.generator.domain.ProductCategory;
 import user.card.generator.domain.ResponseCode;
+import user.card.generator.domain.country.City;
 import user.card.generator.domain.country.Vendor;
 import user.card.generator.domain.person.Person;
 import user.card.generator.domain.person.PersonCategory;
 import user.card.generator.domain.transaction.Transaction;
 import user.card.generator.domain.transaction.TransactionType;
+import user.card.generator.repository.CityRepository;
 import user.card.generator.repository.PersonRepository;
 import user.card.generator.repository.TransactionRepository;
 import user.card.generator.repository.VendorRepository;
@@ -42,10 +44,15 @@ public class RetiredDontUseCardTransactionGeneratorService {
     @Autowired
     TransactionRepository transactionRepository;
 
-    public RetiredDontUseCardTransactionGeneratorService(PersonRepository personRepository, VendorRepository vendorRepository, TransactionRepository transactionRepository) {
+    @Autowired
+    CityRepository cityRepository;
+
+    public RetiredDontUseCardTransactionGeneratorService(PersonRepository personRepository, VendorRepository vendorRepository,
+                                                         TransactionRepository transactionRepository,CityRepository cityRepository) {
         this.personRepository = personRepository;
         this.vendorRepository = vendorRepository;
         this.transactionRepository = transactionRepository;
+        this.cityRepository = cityRepository;
     }
 
     private List<Person> retiredDontUseCardPeople = new ArrayList<>();
@@ -71,6 +78,8 @@ public class RetiredDontUseCardTransactionGeneratorService {
             AtmOwnerBank ownerBank = ownerBanks[random.nextInt(ownerBanks.length)];
             Transaction transaction = new Transaction(person.getCardNumber(), TransactionType.ATM, timestamp, amount, "HUF", ResponseCode.OK,
                     "HU", vendorCode, ProductCategory.CASH, ownerBank);
+            List<City> cities = cityRepository.findAll();
+            transaction.setAllFields(cities);
             transactionRepository.save(transaction);
             transactions.add(transaction);
         }

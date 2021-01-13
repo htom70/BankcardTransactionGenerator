@@ -114,14 +114,14 @@ ordinaryUserUseCardAndInternet:
           Min: 2000
           Max: 25000
 
-  ATMtransaction:
+  ATM:
     monthly:
       occasion:
         Max: 5
       amount:
         Min: 5000
         Max: 50000
-  net:
+  NET:
     monthly:
       occasion::
         Min: 2
@@ -141,7 +141,6 @@ ordinaryUserUseCardAndInternet:
 ordinaryUserUseCardDontUseInternet:
   boundary: 899
   minIncome: 170000
-  averageIncome: 270000
   maxIncome: 370000
   limitRateToIncome: #kiadások aránya a fizetéshez
     Min: 0.8
@@ -187,13 +186,23 @@ ordinaryUserUseCardDontUseInternet:
           Min: 2000
           Max: 15000
 
-  ATMtransaction:
+  ATM:
     monthly:
       occasion:
         Max: 5
       amount:
         Min: 5000
         Max: 50000
+
+  NET:
+    monthlyInDecember:
+      occasion:
+        Min: 10
+        Max: 15
+      amount:
+        Min: 2000
+        Max: 40000
+    limit: 400000
 
 ###################################################
 ordinaryUserDontUseCard:

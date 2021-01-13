@@ -2,18 +2,25 @@ package user.card.generator.domain.transaction;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import user.card.generator.domain.AtmOwnerBank;
 import user.card.generator.domain.ProductCategory;
 import user.card.generator.domain.ResponseCode;
+import user.card.generator.domain.country.City;
 import user.card.generator.domain.country.Country;
 import user.card.generator.domain.country.Vendor;
+import user.card.generator.domain.field.FieldGenerator;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Random;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
@@ -34,8 +41,49 @@ public class Transaction {
     private String vendorCode;
     private ProductCategory productCategory;
     private AtmOwnerBank atmOwnerBank;
+    private Double field1;
+    private Double field2;
+    private Double field3;
+    private Double field4;
+    private Double field5;
+    private Double field6;
+    private Double field7;
+    private Double field8;
+    private Double field9;
+    private Double field10;
+    private Double field11;
+    private Double field12;
+    private Double field13;
+    private Double field14;
+    private Double field15;
+    private Double field16;
+    private Double field17;
+    private Double field18;
+    private Double field19;
+    private Double field20;
+    private Double field21;
+    private Double field22;
+    private Double field23;
+    private Double field24;
+    private Double field25;
+    private String field26;
+    private String field27;
+    private String field28;
+    private String field29;
+    private String field30;
+    private String field31;
+    private String field32;
+    private String field33;
+    private String field34;
+    private String field35;
+    private LocalDate field36;
+    private LocalDate field37;
+    private LocalDate field38;
+    private LocalDate field39;
+    private LocalDate field40;
 
-    public Transaction(String cardNumber,TransactionType transactionType, Timestamp timestamp, int amount, String currencyName, ResponseCode responseCode, String countryName,
+
+    public Transaction(String cardNumber, TransactionType transactionType, Timestamp timestamp, int amount, String currencyName, ResponseCode responseCode, String countryName,
                        String vendorCode, ProductCategory productCategory, AtmOwnerBank atmOwnerBank) {
         this.transactionType = transactionType;
         this.timestamp = timestamp;
@@ -47,5 +95,126 @@ public class Transaction {
         this.productCategory = productCategory;
         this.atmOwnerBank = atmOwnerBank;
         this.cardNumber = cardNumber;
+    }
+
+    public void setAllFields(List<City> cities) {
+        int rate;
+        FieldGenerator fieldGenerator = new FieldGenerator();
+        Random random = new Random();
+        setField1(fieldGenerator.generateFromZeroToOne(random));
+        setField2(fieldGenerator.generateFromZeroToOne(random));
+        rate = random.nextInt(100);
+        if (rate < 80) {
+            setField3(fieldGenerator.generateFromZeroToOne(random));
+        }
+        rate = random.nextInt(100);
+        if (rate < 60) {
+            setField4(fieldGenerator.generateFromZeroToOne(random));
+        }
+        rate = random.nextInt(100);
+        if (rate < 40) {
+            setField5(fieldGenerator.generateFromZeroToOne(random));
+        }
+        rate = random.nextInt(20);
+        if (rate < 20) {
+            setField6(fieldGenerator.generateFromZeroToOne(random));
+        }
+        setField7(fieldGenerator.generateFromMinusOneToOne(random));
+        setField8(fieldGenerator.generateFromMinusOneToOne(random));
+        rate = random.nextInt(100);
+        if (rate < 80) {
+            setField9(fieldGenerator.generateFromMinusOneToOne(random));
+        }
+        rate = random.nextInt(100);
+        if (rate < 60) {
+            setField10(fieldGenerator.generateFromMinusOneToOne(random));
+        }
+        rate = random.nextInt(100);
+        if (rate < 40) {
+            setField11(fieldGenerator.generateFromMinusOneToOne(random));
+        }
+        rate = random.nextInt(100);
+        if (rate < 20) {
+            setField12(fieldGenerator.generateFromMinusOneToOne(random));
+        }
+        setField13(fieldGenerator.generateFromMinusThousandToThousand(random));
+        rate = random.nextInt(100);
+        if (rate < 80) {
+            setField14(fieldGenerator.generateFromMinusThousandToThousand(random));
+        }
+        rate = random.nextInt(100);
+        if (rate < 60) {
+            setField15(fieldGenerator.generateFromMinusThousandToThousand(random));
+        }
+        rate = random.nextInt(100);
+        if (rate < 20) {
+            setField16(fieldGenerator.generateFromMinusThousandToThousand(random));
+        }
+        rate = random.nextInt(100);
+        if (rate < 60) {
+            setField17(fieldGenerator.generateFromZeroToFiveHundredThousand(random));
+        }
+        rate = random.nextInt(100);
+        if (rate < 40) {
+            setField18(fieldGenerator.generateFromZeroToFiveHundredThousand(random));
+        }
+        rate = random.nextInt(100);
+        if (rate < 20) {
+            setField19(fieldGenerator.generateFromZeroToFiveHundredThousand(random));
+        }
+        rate = random.nextInt(100);
+        if (rate < 20) {
+            setField20(fieldGenerator.generateFromZeroToFiveHundredThousand(random));
+        }
+        setField21(fieldGenerator.generateFromMinusHundredToHundred(random));
+        rate = random.nextInt(100);
+        if (rate < 70) {
+            setField22(fieldGenerator.generateFromMinusHundredToHundred(random));
+        }
+        rate = random.nextInt(100);
+        if (rate < 50) {
+            setField23(fieldGenerator.generateFromMinusHundredToHundred(random));
+        }
+        rate = random.nextInt(100);
+        if (rate < 30) {
+            setField24(fieldGenerator.generateFromMinusHundredToHundred(random));
+        }
+        rate = random.nextInt(100);
+        if (rate < 10) {
+            setField25(fieldGenerator.generateFromMinusHundredToHundred(random));
+        }
+        setField26(fieldGenerator.generateMixedLastName(random));
+        rate = random.nextInt(100);
+        if (rate < 60) {
+            setField27(fieldGenerator.generateMixedLastName(random));
+        }
+        setField28(fieldGenerator.generateWomanLastName(random));
+        rate = random.nextInt(100);
+        if (rate < 50) {
+            setField29(fieldGenerator.generateWomanLastName(random));
+        }
+        rate = random.nextInt(100);
+        if (rate < 80) {
+            setField30(fieldGenerator.generateWomanLastName(random));
+        }
+        setField31(fieldGenerator.generateCityName(random,cities));
+        rate = random.nextInt(100);
+        if (rate < 80) {
+            setField32(fieldGenerator.generateCityName(random,cities));
+        }
+        setField33(fieldGenerator.generatePostalCode(random,cities));
+        setField34(fieldGenerator.generateCityName(random,cities));
+        setField35(fieldGenerator.generateCountyCode(random,cities));
+        setField36(fieldGenerator.generateDate(random, LocalDate.of(1940, 1, 1), LocalDate.of(2020, 12, 31)));
+        setField37(fieldGenerator.generateDate(random, LocalDate.of(1990, 1, 1), LocalDate.of(2020, 12, 31)));
+        setField38(fieldGenerator.generateDate(random, LocalDate.of(2020, 1, 1), LocalDate.of(2020, 12, 31)));
+        rate = random.nextInt(100);
+        if (rate < 70) {
+            setField39(fieldGenerator.generateDate(random, LocalDate.of(2020, 1, 1), LocalDate.of(2020, 12, 31)));
+        }
+        rate = random.nextInt(100);
+        if (rate < 50) {
+            setField40(fieldGenerator.generateDate(random, LocalDate.of(2020, 1, 1), LocalDate.of(2020, 12, 31)));
+        }
     }
 }

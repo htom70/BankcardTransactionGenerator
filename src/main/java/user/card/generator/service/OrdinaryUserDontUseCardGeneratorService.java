@@ -19,7 +19,6 @@ import user.card.generator.time.TimestampGenerator;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.YearMonth;
 import java.util.*;
 
 public class OrdinaryUserDontUseCardGeneratorService {
@@ -73,7 +72,7 @@ public class OrdinaryUserDontUseCardGeneratorService {
 
 
     public void generate(Random random, CurrentYear currentYear) {
-        List<Person> ordinaryUserDontUseCardPeople = ordinaryUserDontUseCardPeople = personRepository.findPeopleUponCategory(PersonCategory.ORDINARY_USER_DONT_USE_CARD);
+        List<Person> ordinaryUserDontUseCardPeople = personRepository.findPeopleUponCategory(PersonCategory.ORDINARY_USER_DONT_USE_CARD);
         for (Person person : ordinaryUserDontUseCardPeople) {
             generateCurrentPersonTransactions(person, random, currentYear);
         }
@@ -87,6 +86,7 @@ public class OrdinaryUserDontUseCardGeneratorService {
         int limitToIncome = (int) (person.getIncome() * limitRate);
         int limitToIncomeInChristmasPeriod = (int) (person.getIncome() * ordinaryUserDontUseCardLimitRateToIncomeInChristmasPeriod);
         addToPreTransactionMap(preTransactions, generateYearlyPosTransactions(person, random, currentYear));
+        addToPreTransactionMap(preTransactions, generateYearlyATMTransactions(person, random, currentYear));
         for (int i = 1; i <= 12; i++) {
             int limit;
             int sum = 0;
@@ -94,7 +94,6 @@ public class OrdinaryUserDontUseCardGeneratorService {
                 limit = limitToIncomeInChristmasPeriod;
             } else limit = limitToIncome;
             addToPreTransactionMap(preTransactions, generateDailyPosTransactionsInMonth(person, random, currentYear, i));
-            addToPreTransactionMap(preTransactions, generateATMTransactionsInYear(person, random, currentYear, i));
             //TO-DO limit ellenőrzés
             List<LocalDate> daysOfMonth = currentYear.getDaysOfMonth(Month.of(i));
             List<Transaction> transactionsOfDay;
@@ -164,7 +163,7 @@ public class OrdinaryUserDontUseCardGeneratorService {
         return transactions;
     }
 
-    private List<Transaction> generateATMTransactionsInYear(Person person, Random random, CurrentYear currentYear, int monthOrdinalNumber) {
+    private List<Transaction> generateYearlyATMTransactions(Person person, Random random, CurrentYear currentYear) {
         List<Transaction> transactions = new ArrayList<>();
         List<LocalDate> days = currentYear.getDays();
         int occasion = ordinaryUserDontUseCardATMyearlyOccasionMin + random.nextInt(ordinaryUserDontUseCardATMyearlyOccasionMax - ordinaryUserDontUseCardATMyearlyOccasionMin);

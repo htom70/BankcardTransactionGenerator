@@ -1,11 +1,10 @@
 package user.card.generator.domain.person;
 
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.GenericGenerator;
 import user.card.generator.domain.transaction.Transaction;
-import user.card.generator.domain.transaction.TransactionProperties;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +15,8 @@ import java.util.Set;
 public class Person {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name = "incrementId", strategy = "increment")
+    @GeneratedValue(generator = "incrementId")
     @Column(updatable = false, nullable = false)
     private Long id;
 
