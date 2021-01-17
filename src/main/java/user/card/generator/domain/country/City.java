@@ -12,7 +12,6 @@ import javax.persistence.*;
 @Entity
 public class City {
 
-    private String postalCode;
     private String name;
     private String County;
     private Long id;

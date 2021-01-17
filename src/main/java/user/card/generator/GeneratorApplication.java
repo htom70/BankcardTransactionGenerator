@@ -67,16 +67,16 @@ public class GeneratorApplication implements CommandLineRunner {
         CurrentYear currentYear = new CurrentYear(2008);
 //        List<City> cities = csvHandlerService.citiesReadFromCsv();
 //        cityBatchInsertAsync.batchInsertAsync(cities);
-        List<Person> people = new ArrayList<>();
-        for (int i = 0; i <1000000 ; i++) {
-            people.add(new Person("11", PersonCategory.VIP_USER, 1000000));
-        }
-        personBatchInsertAsync.batchInsertAsync(people);
+//        List<Person> people = new ArrayList<>();
+//        for (int i = 0; i <1000000 ; i++) {
+//            people.add(new Person("11", PersonCategory.VIP_USER, 1000000));
+//        }
+//        personBatchInsertAsync.batchInsertAsync(people);
 
 
 
 //        vendorGenerator.generate();
-//        userGenerator.generatePerson(random);
+        userGenerator.generatePerson(random);
 //        retiredDontUseCardTransactionGeneratorService.generate(random,currentYear.getYear());
 //        retiredUseCardTransactionGeneratorService.generate(random, currentYear);
 //        csvHandlerService.writeData("C:\\Users\\machine\\Documents\\MKI\\transaction.csv");

@@ -3,8 +3,10 @@ package user.card.generator.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import user.card.generator.domain.country.City;
 import user.card.generator.domain.person.Person;
 import user.card.generator.domain.person.PersonCategory;
+import user.card.generator.repository.CityRepository;
 import user.card.generator.repository.CountryRepository;
 import user.card.generator.repository.PersonRepository;
 import user.card.generator.repository.VendorRepository;
@@ -31,13 +33,8 @@ public class UserGenerator {
     @Autowired
     private VendorRepository vendorRepository;
 
-    public UserGenerator(PersonRepository personRepository,
-                         CountryRepository countryRepository,
-                         VendorRepository vendorRepository) {
-        this.personRepository = personRepository;
-        this.countryRepository = countryRepository;
-        this.vendorRepository = vendorRepository;
-    }
+    @Autowired
+    private CityRepository cityRepository;
 
     private List<LocalDate> days = new ArrayList<>();
 
@@ -122,18 +119,22 @@ public class UserGenerator {
 
 
     public void generatePerson(Random random) {
+        Instant start = Instant.now();
+        List<Person> people = new ArrayList<>();
+        List<String> cardNumbers = new ArrayList<>();
         for (int i = 0; i < userNumber; i++) {
-            Person person;
+            Person person = null;
             int income = 0;
             int minIncome = 0;
             int maxIncome = 0;
             String cardNumber;
             do {
                 cardNumber = generateCardNumberString(random);
-            } while (personRepository.findByCardNumber(cardNumber) != null);
+            } while (cardNumbers.contains(cardNumber));
+            cardNumbers.add(cardNumber);
             Integer j = random.nextInt(1000) + 1;
-            System.out.println("j értéke: " + j);
-            System.out.println("cardNumber: " + cardNumber);
+//            System.out.println("j értéke: " + j);
+//            System.out.println("cardNumber: " + cardNumber);
             if (j <= retiredUseCardBoundary) {
                 int minRetiredPay;
                 int maxRetiredPay;
@@ -143,7 +144,7 @@ public class UserGenerator {
                     minRetiredPay = 28500;
                     maxRetiredPay = 49999;
                     percentOfNotUsingRetiredPeople = 95;
-                    person = createRetiredAndSelectRetiredCategory(random, cardNumber,minRetiredPay, maxRetiredPay, percentOfNotUsingRetiredPeople);
+                    person = createRetiredAndSelectRetiredCategory(random, cardNumber, minRetiredPay, maxRetiredPay, percentOfNotUsingRetiredPeople);
                 } else if (numForRetiredClassifying > 0 && numForRetiredClassifying <= 27) {
                     minRetiredPay = 50000;
                     maxRetiredPay = 99999;
@@ -170,10 +171,6 @@ public class UserGenerator {
                     percentOfNotUsingRetiredPeople = 0;
                     person = createRetiredAndSelectRetiredCategory(random, cardNumber, minRetiredPay, maxRetiredPay, percentOfNotUsingRetiredPeople);
                 }
-                minIncome = retiredUseCardMinIncome;
-                maxIncome = retiredUseCardMaxIncome;
-                income = generateIncome(random, minIncome, maxIncome);
-                person = new Person(cardNumber, PersonCategory.RETIRED_USE_CARD_AND_INTERNET, income);
             } else if (j > retiredUseCardBoundary & j <= retiredDontUseCardBoundary) {
                 minIncome = retiredDontUseCardMinIncome;
                 maxIncome = retiredDontUseCardMaxIncome;
@@ -200,9 +197,21 @@ public class UserGenerator {
                 income = generateIncome(random, minIncome, maxIncome);
                 person = new Person(cardNumber, PersonCategory.VIP_USER, income);
             }
-            System.out.println(person.toString());
-            personRepository.save(person);
+            adjustCity(person);
+            people.add(person);
         }
+        Instant endofGeneration = Instant.now();
+        long timeOfGeneration = Duration.between(start, endofGeneration).toMillis();
+        System.out.println("User generálás időtartama: " + timeOfGeneration);
+        personRepository.saveAll(people);
+        Instant endOfSaveAll = Instant.now();
+        long elapsedTime = Duration.between(start, endOfSaveAll).toMillis();
+        System.out.println("User generálás teljes időtartama mentéssel együtt: " + elapsedTime);
+    }
+
+    public void adjustCity(Person person) {
+        City city = cityRepository.findCityOfBudapest();
+        System.out.println("City Budapest: "+city);
     }
 
     private Person createRetiredAndSelectRetiredCategory(Random random, String cardNumber, int minRetiredPay, int maxRetiredPay, int percentOfNotUsingRetiredPeople) {
@@ -227,7 +236,7 @@ public class UserGenerator {
             stringBuilder.append(random.nextInt(10));
         }
         String result = stringBuilder.toString();
-        System.out.println("Card Number: " + result);
+//        System.out.println("Card Number: " + result);
         return result;
     }
 }
