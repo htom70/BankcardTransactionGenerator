@@ -44,9 +44,6 @@ public class GeneratorApplication implements CommandLineRunner {
     CSVHandlerService csvHandlerService;
 
     @Autowired
-    ProbeUserGenerator probeUserGenerator;
-
-    @Autowired
     CityService cityService;
 
     @Autowired

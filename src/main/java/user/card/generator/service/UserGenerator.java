@@ -135,6 +135,41 @@ public class UserGenerator {
             System.out.println("j értéke: " + j);
             System.out.println("cardNumber: " + cardNumber);
             if (j <= retiredUseCardBoundary) {
+                int minRetiredPay;
+                int maxRetiredPay;
+                int percentOfNotUsingRetiredPeople;
+                int numForRetiredClassifying = random.nextInt(100);
+                if (numForRetiredClassifying < 1) {
+                    minRetiredPay = 28500;
+                    maxRetiredPay = 49999;
+                    percentOfNotUsingRetiredPeople = 95;
+                    person = createRetiredAndSelectRetiredCategory(random, cardNumber,minRetiredPay, maxRetiredPay, percentOfNotUsingRetiredPeople);
+                } else if (numForRetiredClassifying > 0 && numForRetiredClassifying <= 27) {
+                    minRetiredPay = 50000;
+                    maxRetiredPay = 99999;
+                    percentOfNotUsingRetiredPeople = 80;
+                    person = createRetiredAndSelectRetiredCategory(random, cardNumber, minRetiredPay, maxRetiredPay, percentOfNotUsingRetiredPeople);
+                } else if (numForRetiredClassifying > 27 && numForRetiredClassifying <= 67) {
+                    minRetiredPay = 100000;
+                    maxRetiredPay = 149999;
+                    percentOfNotUsingRetiredPeople = 70;
+                    person = createRetiredAndSelectRetiredCategory(random, cardNumber, minRetiredPay, maxRetiredPay, percentOfNotUsingRetiredPeople);
+                } else if (numForRetiredClassifying > 67 && numForRetiredClassifying <= 86) {
+                    minRetiredPay = 150000;
+                    maxRetiredPay = 199999;
+                    percentOfNotUsingRetiredPeople = 50;
+                    person = createRetiredAndSelectRetiredCategory(random, cardNumber, minRetiredPay, maxRetiredPay, percentOfNotUsingRetiredPeople);
+                } else if (numForRetiredClassifying > 86 && numForRetiredClassifying <= 97) {
+                    minRetiredPay = 200000;
+                    maxRetiredPay = 299999;
+                    percentOfNotUsingRetiredPeople = 20;
+                    person = createRetiredAndSelectRetiredCategory(random, cardNumber, minRetiredPay, maxRetiredPay, percentOfNotUsingRetiredPeople);
+                } else if (numForRetiredClassifying > 97) {
+                    minRetiredPay = 300000;
+                    maxRetiredPay = 1200000;
+                    percentOfNotUsingRetiredPeople = 0;
+                    person = createRetiredAndSelectRetiredCategory(random, cardNumber, minRetiredPay, maxRetiredPay, percentOfNotUsingRetiredPeople);
+                }
                 minIncome = retiredUseCardMinIncome;
                 maxIncome = retiredUseCardMaxIncome;
                 income = generateIncome(random, minIncome, maxIncome);
@@ -168,6 +203,18 @@ public class UserGenerator {
             System.out.println(person.toString());
             personRepository.save(person);
         }
+    }
+
+    private Person createRetiredAndSelectRetiredCategory(Random random, String cardNumber, int minRetiredPay, int maxRetiredPay, int percentOfNotUsingRetiredPeople) {
+        Person person;
+        int retiredPay = minRetiredPay + random.nextInt(maxRetiredPay - minRetiredPay);
+        int numForSelectCategoryWhetherUseCardRetired = random.nextInt(100);
+        if (numForSelectCategoryWhetherUseCardRetired < percentOfNotUsingRetiredPeople) {
+            person = new Person(cardNumber, PersonCategory.RETIRED_DONT_USE_CARD_AND_INTERNET, retiredPay);
+        } else {
+            person = new Person(cardNumber, PersonCategory.RETIRED_USE_CARD_AND_INTERNET, retiredPay);
+        }
+        return person;
     }
 
     private int generateIncome(Random random, int minIncom, int maxIncome) {

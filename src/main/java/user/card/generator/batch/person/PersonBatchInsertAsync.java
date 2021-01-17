@@ -11,6 +11,8 @@ import user.card.generator.batch.city.CityBatchPreparedStatementSetter;
 import user.card.generator.domain.country.City;
 import user.card.generator.domain.person.Person;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -39,6 +41,7 @@ public class PersonBatchInsertAsync {
         String sql = "INSERT INTO person (card_number, income, person_category)" + "VALUES(?,?,?)";
         final AtomicInteger sublists = new AtomicInteger();
 
+        Instant start = Instant.now();
         CompletableFuture[] futures = people.stream()
                 .collect(Collectors.groupingBy(t -> sublists.getAndIncrement() / batchSize))
                 .values()
@@ -54,6 +57,9 @@ public class PersonBatchInsertAsync {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        Instant end = Instant.now();
+        long elapsedTime = Duration.between(start, end).toMillis();
+        System.out.println("Elapsed Time: " + elapsedTime);
     }
 
     private CompletableFuture<Void> runBatchInsert(List<Person> people, String sql) {
