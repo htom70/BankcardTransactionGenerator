@@ -7,8 +7,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import user.card.generator.batch.city.CityBatchPreparedStatementSetter;
-import user.card.generator.domain.country.City;
 import user.card.generator.domain.person.Person;
 
 import java.time.Duration;

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import user.card.generator.domain.AtmOwnerBank;
 import user.card.generator.domain.ProductCategory;
 import user.card.generator.domain.ResponseCode;
-import user.card.generator.domain.country.City;
+import user.card.generator.domain.city.City;
 import user.card.generator.domain.country.Vendor;
 import user.card.generator.domain.person.Person;
 import user.card.generator.domain.person.PersonCategory;

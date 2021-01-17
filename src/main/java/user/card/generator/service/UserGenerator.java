@@ -3,7 +3,7 @@ package user.card.generator.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import user.card.generator.domain.country.City;
+import user.card.generator.domain.city.City;
 import user.card.generator.domain.person.Person;
 import user.card.generator.domain.person.PersonCategory;
 import user.card.generator.repository.CityRepository;
@@ -197,7 +197,41 @@ public class UserGenerator {
                 income = generateIncome(random, minIncome, maxIncome);
                 person = new Person(cardNumber, PersonCategory.VIP_USER, income);
             }
-            adjustCity(person);
+            List<City> cities = cityRepository.findAll();
+            City cityOfBudapest = cityRepository.findByName("Budapest");
+            City cityIOfDebrecen = cityRepository.findByName("Debrecen");
+            City cityOfSzeged = cityRepository.findByName("Szeged");
+            City cityOfNyiregyhaza = cityRepository.findByName("Nyíregyháza");
+            City cityOfMiskolc = cityRepository.findByName("Miskolc");
+            City cityOfPécs = cityRepository.findByName("Pécs");
+            City cityOfGyor = cityRepository.findByName("Gy?r");
+            cities.remove(cityIOfDebrecen);
+            cities.remove(cityOfBudapest);
+            cities.remove(cityOfGyor);
+            cities.remove(cityOfMiskolc);
+            cities.remove(cityOfNyiregyhaza);
+            cities.remove(cityOfPécs);
+            cities.remove(cityOfSzeged);
+            int numberForClassificationOfPersonsCity = random.nextInt(100);
+            if (numberForClassificationOfPersonsCity < 20) {
+                person.setCity(cityOfBudapest);
+            } else if (numberForClassificationOfPersonsCity >= 20 && numberForClassificationOfPersonsCity < 22) {
+                person.setCity(cityIOfDebrecen);
+            } else if (numberForClassificationOfPersonsCity >= 22 && numberForClassificationOfPersonsCity < 24) {
+                person.setCity(cityOfGyor);
+            } else if (numberForClassificationOfPersonsCity >= 24 && numberForClassificationOfPersonsCity < 26) {
+                person.setCity(cityOfMiskolc);
+            } else if (numberForClassificationOfPersonsCity >= 26 && numberForClassificationOfPersonsCity < 28) {
+                person.setCity(cityOfNyiregyhaza);
+            } else if (numberForClassificationOfPersonsCity >= 28 && numberForClassificationOfPersonsCity < 30) {
+                person.setCity(cityOfPécs);
+            } else if (numberForClassificationOfPersonsCity >= 30 && numberForClassificationOfPersonsCity < 32) {
+                person.setCity(cityOfSzeged);
+            } else {
+                int size = cities.size();
+                int numberForClassificationOfPersonsCityWithoutBigCities = random.nextInt(size);
+                person.setCity(cities.get(numberForClassificationOfPersonsCityWithoutBigCities));
+            }
             people.add(person);
         }
         Instant endofGeneration = Instant.now();
@@ -209,10 +243,6 @@ public class UserGenerator {
         System.out.println("User generálás teljes időtartama mentéssel együtt: " + elapsedTime);
     }
 
-    public void adjustCity(Person person) {
-        City city = cityRepository.findCityOfBudapest();
-        System.out.println("City Budapest: "+city);
-    }
 
     private Person createRetiredAndSelectRetiredCategory(Random random, String cardNumber, int minRetiredPay, int maxRetiredPay, int percentOfNotUsingRetiredPeople) {
         Person person;

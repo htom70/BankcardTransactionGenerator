@@ -1,7 +1,6 @@
 package user.card.generator.batch.person;
 
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
-import user.card.generator.domain.country.City;
 import user.card.generator.domain.person.Person;
 
 import java.sql.PreparedStatement;

@@ -2,8 +2,7 @@ package user.card.generator.domain.person;
 
 import lombok.Data;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.GenericGenerator;
-import user.card.generator.domain.country.City;
+import user.card.generator.domain.city.City;
 import user.card.generator.domain.transaction.Transaction;
 
 import javax.persistence.*;
