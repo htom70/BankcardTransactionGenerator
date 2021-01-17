@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,6 +36,9 @@ public class UserGenerator {
 
     @Autowired
     private CityRepository cityRepository;
+
+    @Autowired
+    private CityService cityService;
 
     private List<LocalDate> days = new ArrayList<>();
 
@@ -122,6 +126,23 @@ public class UserGenerator {
         Instant start = Instant.now();
         List<Person> people = new ArrayList<>();
         List<String> cardNumbers = new ArrayList<>();
+        Map<String, List<City>> citiesByNames = cityService.citiesByNames();
+//        List<City> cities = cityRepository.findAll();
+//        City cityOfBudapest = cityRepository.findByName("Budapest");
+//        City cityIOfDebrecen = cityRepository.findByName("Debrecen");
+//        City cityOfSzeged = cityRepository.findByName("Szeged");
+//        City cityOfNyiregyhaza = cityRepository.findByName("Nyíregyháza");
+//        City cityOfMiskolc = cityRepository.findByName("Miskolc");
+//        City cityOfPécs = cityRepository.findByName("Pécs");
+//        City cityOfGyor = cityRepository.findByName("Gy?r");
+//        cities.remove(cityOfBudapest);
+//        cities.remove(cityIOfDebrecen);
+//        cities.remove(cityOfSzeged);
+//        cities.remove(cityOfNyiregyhaza);
+//        cities.remove(cityOfMiskolc);
+//        cities.remove(cityOfPécs);
+//        cities.remove(cityOfGyor);
+
         for (int i = 0; i < userNumber; i++) {
             Person person = null;
             int income = 0;
@@ -197,40 +218,29 @@ public class UserGenerator {
                 income = generateIncome(random, minIncome, maxIncome);
                 person = new Person(cardNumber, PersonCategory.VIP_USER, income);
             }
-            List<City> cities = cityRepository.findAll();
-            City cityOfBudapest = cityRepository.findByName("Budapest");
-            City cityIOfDebrecen = cityRepository.findByName("Debrecen");
-            City cityOfSzeged = cityRepository.findByName("Szeged");
-            City cityOfNyiregyhaza = cityRepository.findByName("Nyíregyháza");
-            City cityOfMiskolc = cityRepository.findByName("Miskolc");
-            City cityOfPécs = cityRepository.findByName("Pécs");
-            City cityOfGyor = cityRepository.findByName("Gy?r");
-            cities.remove(cityIOfDebrecen);
-            cities.remove(cityOfBudapest);
-            cities.remove(cityOfGyor);
-            cities.remove(cityOfMiskolc);
-            cities.remove(cityOfNyiregyhaza);
-            cities.remove(cityOfPécs);
-            cities.remove(cityOfSzeged);
+
+
+
             int numberForClassificationOfPersonsCity = random.nextInt(100);
             if (numberForClassificationOfPersonsCity < 20) {
-                person.setCity(cityOfBudapest);
+                person.setCity(citiesByNames.get("Budapest").get(0));
             } else if (numberForClassificationOfPersonsCity >= 20 && numberForClassificationOfPersonsCity < 22) {
-                person.setCity(cityIOfDebrecen);
+                person.setCity(citiesByNames.get("Gyor").get(0));
             } else if (numberForClassificationOfPersonsCity >= 22 && numberForClassificationOfPersonsCity < 24) {
-                person.setCity(cityOfGyor);
+                person.setCity(citiesByNames.get("Gyor").get(0));
             } else if (numberForClassificationOfPersonsCity >= 24 && numberForClassificationOfPersonsCity < 26) {
-                person.setCity(cityOfMiskolc);
+                person.setCity(citiesByNames.get("Miskolc").get(0));
             } else if (numberForClassificationOfPersonsCity >= 26 && numberForClassificationOfPersonsCity < 28) {
-                person.setCity(cityOfNyiregyhaza);
+                person.setCity(citiesByNames.get("Nyiregyhaza").get(0));
             } else if (numberForClassificationOfPersonsCity >= 28 && numberForClassificationOfPersonsCity < 30) {
-                person.setCity(cityOfPécs);
+                person.setCity(citiesByNames.get("Pécs").get(0));
             } else if (numberForClassificationOfPersonsCity >= 30 && numberForClassificationOfPersonsCity < 32) {
-                person.setCity(cityOfSzeged);
+                person.setCity(citiesByNames.get("Szeged").get(0));
             } else {
-                int size = cities.size();
+                List<City> otherCities = citiesByNames.get("others");
+                int size = otherCities.size();
                 int numberForClassificationOfPersonsCityWithoutBigCities = random.nextInt(size);
-                person.setCity(cities.get(numberForClassificationOfPersonsCityWithoutBigCities));
+                person.setCity(otherCities.get(numberForClassificationOfPersonsCityWithoutBigCities));
             }
             people.add(person);
         }

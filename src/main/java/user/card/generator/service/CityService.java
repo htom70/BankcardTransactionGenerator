@@ -16,9 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CityService {
@@ -35,6 +33,34 @@ public class CityService {
 
     public void saveAllCities(List<City> cities) {
         cityRepository.saveAll(cities);
+    }
+
+    public Map<String, List<City>> citiesByNames() {
+        Map<String, List<City>> result = new HashMap<>();
+        List<City> cities = cityRepository.findAll();
+        City cityOfBudapest = cityRepository.findByName("Budapest");
+        City cityIOfDebrecen = cityRepository.findByName("Debrecen");
+        City cityOfSzeged = cityRepository.findByName("Szeged");
+        City cityOfNyiregyhaza = cityRepository.findByName("Nyíregyháza");
+        City cityOfMiskolc = cityRepository.findByName("Miskolc");
+        City cityOfPécs = cityRepository.findByName("Pécs");
+        City cityOfGyor = cityRepository.findByName("Gy?r");
+        result.put("Budapest", new ArrayList<>(Arrays.asList(cityOfBudapest)));
+        result.put("Debrecen", new ArrayList<>(Arrays.asList(cityIOfDebrecen)));
+        result.put("Szeged", new ArrayList<>(Arrays.asList(cityOfSzeged)));
+        result.put("Nyiregyhaza", new ArrayList<>(Arrays.asList(cityOfNyiregyhaza)));
+        result.put("Miskolc", new ArrayList<>(Arrays.asList(cityOfMiskolc)));
+        result.put("Pécs", new ArrayList<>(Arrays.asList(cityOfPécs)));
+        result.put("Gyor", new ArrayList<>(Arrays.asList(cityOfGyor)));
+        cities.remove(cityOfBudapest);
+        cities.remove(cityIOfDebrecen);
+        cities.remove(cityOfSzeged);
+        cities.remove(cityOfNyiregyhaza);
+        cities.remove(cityOfMiskolc);
+        cities.remove(cityOfPécs);
+        cities.remove(cityOfGyor);
+        result.put("others", cities);
+        return result;
     }
 
     @Transactional
