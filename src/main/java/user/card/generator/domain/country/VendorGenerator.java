@@ -2,7 +2,7 @@ package user.card.generator.domain.country;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import user.card.generator.domain.vendor.Vendor;
+import user.card.generator.domain.vendor.AbstractVendor;
 import user.card.generator.repository.CountryRepository;
 import user.card.generator.repository.VendorRepository;
 
@@ -39,24 +39,24 @@ public class VendorGenerator {
         }
         List<Country> countries = countryRepository.findAll();
         for (int i = 0; i < countries.size(); i++) {
-            generateVendors(random, countries.get(i));
+//            generateVendors(random, countries.get(i));
         }
     }
 
-    private Set<Vendor> generateVendors(Random random, Country country) {
-        Set<Vendor> result = new HashSet<>();
-            for (int i = 0; i < 100; i++) {
-                String generatedVendorCode;
-                do {
-                    generatedVendorCode = generateVendorString(random);
-                } while (vendorRepository.findByVendorCode(generatedVendorCode) != null);
-                Vendor vendor = new Vendor(generatedVendorCode);
-                vendor.setCountry(country);
-                vendorRepository.save(vendor);
-                result.add(vendor);
-            }
-        return result;
-    }
+//    private Set<AbstractVendor> generateVendors(Random random, Country country) {
+//        Set<AbstractVendor> result = new HashSet<>();
+//            for (int i = 0; i < 100; i++) {
+//                String generatedVendorCode;
+//                do {
+//                    generatedVendorCode = generateVendorString(random);
+//                } while (vendorRepository.findByVendorCode(generatedVendorCode) != null);
+////                AbstractVendor vendor = new AbstractVendor(generatedVendorCode);
+////                vendor.setCountry(country);
+//                vendorRepository.save(vendor);
+//                result.add(vendor);
+//            }
+//        return result;
+//    }
 
     private String generateVendorString(Random random) {
         StringBuilder stringBuilder = new StringBuilder();

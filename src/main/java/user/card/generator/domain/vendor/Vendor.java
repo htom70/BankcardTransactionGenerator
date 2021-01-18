@@ -1,27 +1,16 @@
 package user.card.generator.domain.vendor;
 
-import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.ManyToAny;
-import user.card.generator.domain.country.Country;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @NoArgsConstructor
-@Getter
-@Setter
-public class Vendor {
-
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+@PrimaryKeyJoinColumn
+public class Vendor extends AbstractVendor{
 
     private String vendorCode;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Country country;
 
     public Vendor(String vendorCode) {
         this.vendorCode = vendorCode;

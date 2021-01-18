@@ -4,11 +4,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import user.card.generator.domain.AtmOwnerBank;
+import user.card.generator.domain.BankInHungary;
 import user.card.generator.domain.ProductCategory;
 import user.card.generator.domain.ResponseCode;
 import user.card.generator.domain.city.City;
-import user.card.generator.domain.city.County;
 import user.card.generator.domain.field.FieldGenerator;
 import user.card.generator.domain.name.WomanName;
 
@@ -41,7 +40,7 @@ public class Transaction {
     private String countryName;
     private String vendorCode;
     private ProductCategory productCategory;
-    private AtmOwnerBank atmOwnerBank;
+    private BankInHungary atmOwnerBank;
     private Double field1;
     private Double field2;
     private Double field3;
@@ -85,7 +84,7 @@ public class Transaction {
 
 
     public Transaction(String cardNumber, TransactionType transactionType, Timestamp timestamp, int amount, String currencyName, ResponseCode responseCode, String countryName,
-                       String vendorCode, ProductCategory productCategory, AtmOwnerBank atmOwnerBank) {
+                       String vendorCode, ProductCategory productCategory, BankInHungary atmOwnerBank) {
         this.transactionType = transactionType;
         this.timestamp = timestamp;
         this.amount = amount;

@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import user.card.generator.domain.vendor.Vendor;
+import user.card.generator.domain.vendor.AbstractVendor;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -28,8 +28,8 @@ public class Country {
     private String name;
     private String currencyName;
 
-    @OneToMany(mappedBy = "country",fetch = FetchType.EAGER)
-    private Set<Vendor> vendors = new HashSet<>();
+//    @OneToMany(mappedBy = "country",fetch = FetchType.EAGER)
+//    private Set<AbstractVendor> vendors = new HashSet<>();
 
     public Country(String name, String currencyName) {
         this.name = name;

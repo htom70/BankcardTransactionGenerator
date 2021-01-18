@@ -1,10 +1,14 @@
 package user.card.generator.domain;
 
-public enum AtmOwnerBank {
+public enum BankInHungary {
     OTP,
     CIB,
     KH,
     RAIFFEISEN,
     UNICREDIT,
-    TAKAREKBANK
+    TAKAREKBANK,
+    SBERBANK,
+    BBRT,
+    ERSTE,
+    CITY
 }
