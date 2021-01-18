@@ -73,7 +73,6 @@ public class CSVHandlerService {
             while (iterator.hasNext()) {
                 String[] record = iterator.next();
                 City city = new City();
-                city.setPostalCode(record[0]);
                 city.setName(record[1]);
                 city.setCounty(record[2]);
                 cities.add(city);

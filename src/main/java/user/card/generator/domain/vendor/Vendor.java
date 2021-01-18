@@ -1,8 +1,9 @@
-package user.card.generator.domain.country;
+package user.card.generator.domain.vendor;
 
 import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.ManyToAny;
+import user.card.generator.domain.country.Country;
 
 import javax.persistence.*;
 
@@ -14,9 +15,7 @@ import javax.persistence.*;
 @Setter
 public class Vendor {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(updatable = false, nullable = false)
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     private String vendorCode;

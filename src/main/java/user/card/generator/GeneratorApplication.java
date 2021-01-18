@@ -17,9 +17,12 @@ import user.card.generator.domain.transaction.Transaction;
 import user.card.generator.domain.transaction.TransactionType;
 import user.card.generator.repository.TransactionRepository;
 import user.card.generator.service.*;
+import user.card.generator.service.persistence.PersonService;
 import user.card.generator.time.CurrentYear;
 import user.card.generator.time.TimestampGenerator;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +61,9 @@ public class GeneratorApplication implements CommandLineRunner {
     @Autowired
     PersonBatchInsertAsync personBatchInsertAsync;
 
+    @Autowired
+    PersonService personService;
+
     public static void main(String[] args) {
         SpringApplication.run(GeneratorApplication.class, args);
     }
@@ -71,10 +77,15 @@ public class GeneratorApplication implements CommandLineRunner {
 //        List<City> cities = csvHandlerService.citiesReadFromCsv();
 //        cityBatchInsertAsync.batchInsertAsync(cities);
         List<Person> people = new ArrayList<>();
-        for (int i = 0; i <1000000 ; i++) {
+        for (int i = 0; i <5000000 ; i++) {
             people.add(new Person("11", PersonCategory.VIP_USER, 1000000));
         }
         personBatchInsertAsync.batchInsertAsync(people);
+//        Instant start = Instant.now();
+//        personService.saveALlPeople(people);
+//        Instant end = Instant.now();
+//        long elapsedTime = Duration.between(start, end).toMillis();
+//        System.out.println(elapsedTime);
 
 
 

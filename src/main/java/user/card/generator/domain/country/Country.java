@@ -1,11 +1,11 @@
 package user.card.generator.domain.country;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import user.card.generator.domain.vendor.Vendor;
 
 import javax.persistence.*;
 import java.util.HashSet;

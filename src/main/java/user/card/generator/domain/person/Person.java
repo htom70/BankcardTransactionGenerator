@@ -14,10 +14,7 @@ import java.util.Set;
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Person {
 
-    @Id
-    @GenericGenerator(name = "incrementId", strategy = "increment")
-    @GeneratedValue(generator = "incrementId")
-    @Column(updatable = false, nullable = false)
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     private String cardNumber;

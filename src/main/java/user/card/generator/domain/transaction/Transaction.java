@@ -8,8 +8,6 @@ import user.card.generator.domain.AtmOwnerBank;
 import user.card.generator.domain.ProductCategory;
 import user.card.generator.domain.ResponseCode;
 import user.card.generator.domain.country.City;
-import user.card.generator.domain.country.Country;
-import user.card.generator.domain.country.Vendor;
 import user.card.generator.domain.field.FieldGenerator;
 import user.card.generator.domain.name.WomanName;
 
