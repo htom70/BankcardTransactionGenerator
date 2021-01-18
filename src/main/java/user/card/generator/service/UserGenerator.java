@@ -126,7 +126,7 @@ public class UserGenerator {
         Instant start = Instant.now();
         List<Person> people = new ArrayList<>();
         List<String> cardNumbers = new ArrayList<>();
-        Map<String, List<City>> citiesByNames = cityService.citiesByNames();
+        Map<String, List<City>> citiesByNames = cityService.getCitiesByNames();
 //        List<City> cities = cityRepository.findAll();
 //        City cityOfBudapest = cityRepository.findByName("Budapest");
 //        City cityIOfDebrecen = cityRepository.findByName("Debrecen");

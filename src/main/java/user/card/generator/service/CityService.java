@@ -35,7 +35,7 @@ public class CityService {
         cityRepository.saveAll(cities);
     }
 
-    public Map<String, List<City>> citiesByNames() {
+    public Map<String, List<City>> getCitiesByNames() {
         Map<String, List<City>> result = new HashMap<>();
         List<City> cities = cityRepository.findAll();
         City cityOfBudapest = cityRepository.findByName("Budapest");
