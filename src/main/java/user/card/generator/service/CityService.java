@@ -35,6 +35,18 @@ public class CityService {
         cityRepository.saveAll(cities);
     }
 
+    public City findByName(String name) {
+        return cityRepository.findByName(name);
+    }
+
+    public List<City> findByNameNotIn(List<String> citinames) {
+        return cityRepository.findAllByNameNotIn(citinames);
+    }
+
+    public List<City> findByNameIn(List<String> citieNames) {
+        return cityRepository.findAllByNameIn(citieNames);
+    }
+
     public Map<String, List<City>> getCitiesByNames() {
         Map<String, List<City>> result = new HashMap<>();
         List<City> cities = cityRepository.findAll();

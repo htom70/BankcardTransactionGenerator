@@ -19,7 +19,6 @@ public abstract class AbstractVendor {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private City city;
+
 
 }

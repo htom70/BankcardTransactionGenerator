@@ -2,8 +2,10 @@ package user.card.generator.domain.vendor;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import user.card.generator.domain.city.City;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -16,7 +18,12 @@ public class ATM extends AbstractVendor {
     @ManyToOne
     private Bank atmOwnerBank;
 
-    public ATM(String ATMcode) {
+    @ManyToOne(fetch = FetchType.EAGER)
+    private City city;
+
+    public ATM(String ATMcode, City city) {
         this.ATMcode = ATMcode;
+        this.city = city;
+
     }
 }

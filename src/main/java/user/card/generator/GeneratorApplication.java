@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import user.card.generator.batch.person.PersonBatchInsertAsync;
 import user.card.generator.domain.BankInHungary;
+import user.card.generator.domain.city.City;
 import user.card.generator.domain.country.VendorGenerator;
 import user.card.generator.domain.vendor.ATM;
 import user.card.generator.domain.vendor.Bank;
@@ -17,6 +18,8 @@ import user.card.generator.repository.VendorRepository;
 import user.card.generator.service.*;
 import user.card.generator.time.CurrentYear;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @SpringBootApplication
@@ -58,6 +61,9 @@ public class GeneratorApplication implements CommandLineRunner {
     @Autowired
     BankService bankService;
 
+    @Autowired
+    VendorService vendorService;
+
     public static void main(String[] args) {
         SpringApplication.run(GeneratorApplication.class, args);
     }
@@ -77,24 +83,34 @@ public class GeneratorApplication implements CommandLineRunner {
 //        personBatchInsertAsync.batchInsertAsync(people);
 
 
-
 //        vendorGenerator.generate();
-        cityService.citiesReadFromCsv();
+//        cityService.citiesReadFromCsv();
 //        userGenerator.generatePerson(random);
 //        retiredDontUseCardTransactionGeneratorService.generate(random,currentYear.getYear());
 //        retiredUseCardTransactionGeneratorService.generate(random, currentYear);
 //        csvHandlerService.writeData("C:\\Users\\machine\\Documents\\MKI\\transaction.csv");
 //        probeUserGenerator.generate(random);
-        vendorRepository.save(new Vendor("firstVendor"));
+//
+        List<String> bigCityNames = new ArrayList<String>() {{
+            add("Budapest");
+            add("Szeged");
+            add("Miskolc");
+            add("Debrecen");
+            add("Pécs");
+            add("Gy?r");
+            add("Nyíregyháza");
 
-        bankService.generateHungarianBanks();
-        ATM atm0 = new ATM("First");
-        ATM atm1 = new ATM("Second");
-        atm0.setAtmOwnerBank(bankRepository.findByName("OTP"));
-        atm1.setAtmOwnerBank(bankRepository.findByName("OTP"));
+        }};
+        List<City> cities = cityService.findByNameNotIn(bigCityNames);
+        System.out.println("Little cities count: " + cities.size());
 
-        atMrepository.save(atm0);
-        atMrepository.save(atm1);
+        List<City> bigCities = cityService.findByNameIn(bigCityNames);
+        System.out.println("Big Cities count: " + bigCities.size());
+
+        vendorService.generateVendorsInHungary();
+
+//        cityService.findAllByNameIn(cities);
+
 
     }
 }
