@@ -1,7 +1,8 @@
 package user.card.generator.domain.person;
 
+import lombok.Data;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.GenericGenerator;
+import user.card.generator.domain.city.City;
 import user.card.generator.domain.transaction.Transaction;
 
 import javax.persistence.*;
@@ -9,12 +10,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Data
 @Entity
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Person {
 
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String cardNumber;
@@ -26,6 +29,9 @@ public class Person {
     @OneToMany(fetch = FetchType.EAGER)
     protected Set<Transaction> transactions = new HashSet<>();
 
+    @ManyToOne
+    private City city;
+
     public Person(String cardNumber) {
         this.cardNumber = cardNumber;
     }
@@ -33,7 +39,7 @@ public class Person {
     public Person() {
     }
 
-    public Person(String cardNumber, PersonCategory personCategory,int income) {
+    public Person(String cardNumber, PersonCategory personCategory, int income) {
         this.cardNumber = cardNumber;
         this.personCategory = personCategory;
         this.income = income;

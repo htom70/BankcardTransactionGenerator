@@ -7,11 +7,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import user.card.generator.batch.city.CityBatchPreparedStatementSetter;
-import user.card.generator.domain.country.City;
 import user.card.generator.domain.person.Person;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
@@ -43,7 +40,6 @@ public class PersonBatchInsertAsync {
         final AtomicInteger sublists = new AtomicInteger();
 
         Instant start = Instant.now();
-
         CompletableFuture[] futures = people.stream()
                 .collect(Collectors.groupingBy(t -> sublists.getAndIncrement() / batchSize))
                 .values()
@@ -61,7 +57,7 @@ public class PersonBatchInsertAsync {
         }
         Instant end = Instant.now();
         long elapsedTime = Duration.between(start, end).toMillis();
-        System.out.println("Person batch running time: " + elapsedTime);
+        System.out.println("Elapsed Time: " + elapsedTime);
     }
 
     private CompletableFuture<Void> runBatchInsert(List<Person> people, String sql) {

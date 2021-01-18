@@ -2,15 +2,11 @@ package user.card.generator.service;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
-import com.opencsv.bean.ColumnPositionMappingStrategy;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
-import user.card.generator.domain.country.City;
-import user.card.generator.domain.country.Country;
+import user.card.generator.domain.city.City;
 import user.card.generator.domain.transaction.Transaction;
 import user.card.generator.repository.CountryRepository;
 import user.card.generator.repository.TransactionRepository;
@@ -18,7 +14,6 @@ import user.card.generator.repository.TransactionRepository;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -58,29 +53,5 @@ public class CSVHandlerService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public List<City> citiesReadFromCsv()  {
-        Reader reader = null;
-        List<City> cities = new ArrayList<>();
-        try {
-            reader = Files.newBufferedReader(Paths.get("C:\\Users\\machine\\Downloads\\iranyitoszamok.csv"),Charset.forName("ISO-8859-1"));
-            CSVReader csvReader = new CSVReader(reader);
-
-            String[] firstLine=csvReader.readNext();
-            List<String[]> records = csvReader.readAll();
-            Iterator<String[]> iterator = records.iterator();
-            while (iterator.hasNext()) {
-                String[] record = iterator.next();
-                City city = new City();
-                city.setName(record[1]);
-                city.setCounty(record[2]);
-                cities.add(city);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("City list length: " + cities.size());
-        return cities;
     }
 }

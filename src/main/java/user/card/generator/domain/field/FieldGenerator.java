@@ -1,12 +1,10 @@
 package user.card.generator.domain.field;
 
-import user.card.generator.domain.country.City;
 import user.card.generator.domain.name.ManName;
 import user.card.generator.domain.name.WomanName;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -50,21 +48,6 @@ public class FieldGenerator {
     public String generateManLastName(Random random) {
         ManName[] manNames = ManName.values();
         return manNames[random.nextInt(manNames.length)].toString();
-    }
-
-    public String generateCityName(Random random, List<City> cities) {
-        int size = cities.size();
-        return cities.get(random.nextInt(size)).getName();
-    }
-
-    public String generatePostalCode(Random random, List<City> cities) {
-        int size = cities.size();
-        return cities.get(random.nextInt(size)).getPostalCode();
-    }
-
-    public String generateCountyCode(Random random, List<City> cities) {
-        int size = cities.size();
-        return cities.get(random.nextInt(size)).getCounty();
     }
 
     public LocalDate generateDate(Random random, LocalDate startDate, LocalDate endDate) {
