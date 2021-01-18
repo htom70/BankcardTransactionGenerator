@@ -1,5 +1,6 @@
 package user.card.generator.domain.field;
 
+import user.card.generator.domain.city.City;
 import user.card.generator.domain.name.ManName;
 import user.card.generator.domain.name.WomanName;
 
@@ -58,4 +59,12 @@ public class FieldGenerator {
         return days.get(random.nextInt(size));
     }
 
+    public String generateCityName(Random random, List<City> cities) {
+        int size = cities.size();
+        return cities.get(random.nextInt(size)).getName();
+    }
+
+    public String generateCountyCode(City currentCity) {
+        return currentCity.getCounty().getName();
+    }
 }

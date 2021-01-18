@@ -8,4 +8,5 @@ import user.card.generator.domain.city.County;
 public interface CountyRepository extends JpaRepository<County, Long> {
 
     public County findByName(String name);
+
 }

@@ -8,6 +8,7 @@ import user.card.generator.domain.AtmOwnerBank;
 import user.card.generator.domain.ProductCategory;
 import user.card.generator.domain.ResponseCode;
 import user.card.generator.domain.city.City;
+import user.card.generator.domain.city.County;
 import user.card.generator.domain.field.FieldGenerator;
 import user.card.generator.domain.name.WomanName;
 
@@ -199,14 +200,16 @@ public class Transaction {
                 setField30(fieldGenerator.generateWomanLastName(random));
             }
         }
-//        setField31(fieldGenerator.generateCityName(random,cities));
-//        rate = random.nextInt(100);
-//        if (rate < 80) {
-//            setField32(fieldGenerator.generateCityName(random,cities));
-//        }
-//        setField33(fieldGenerator.generatePostalCode(random,cities));
-//        setField34(fieldGenerator.generateCityName(random,cities));
-//        setField35(fieldGenerator.generateCountyCode(random,cities));
+        setField31(fieldGenerator.generateCityName(random,cities));
+        rate = random.nextInt(100);
+        if (rate < 80) {
+            setField32(fieldGenerator.generateCityName(random,cities));
+        }
+        int placeIndex = random.nextInt(cities.size());
+        City currentCity = cities.get(placeIndex);
+        setField33(currentCity.getName());
+        setField34(currentCity.getName());
+        setField35(fieldGenerator.generateCountyCode(currentCity));
         setField36(fieldGenerator.generateDate(random, LocalDate.of(1940, 1, 1), LocalDate.of(2020, 12, 31)));
         setField37(fieldGenerator.generateDate(random, LocalDate.of(1990, 1, 1), LocalDate.of(2020, 12, 31)));
         setField38(fieldGenerator.generateDate(random, LocalDate.of(2020, 1, 1), LocalDate.of(2020, 12, 31)));

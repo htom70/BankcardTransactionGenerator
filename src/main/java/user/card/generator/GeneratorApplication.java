@@ -60,7 +60,7 @@ public class GeneratorApplication implements CommandLineRunner {
 
 
 //        vendorGenerator.generate();
-//        cityService.citiesReadFromCsv();
+        cityService.citiesReadFromCsv();
         userGenerator.generatePerson(random);
 //        retiredDontUseCardTransactionGeneratorService.generate(random,currentYear.getYear());
 //        retiredUseCardTransactionGeneratorService.generate(random, currentYear);
