@@ -2,11 +2,9 @@ package user.card.generator.domain.city;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import user.card.generator.domain.country.Country;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
@@ -19,7 +17,11 @@ public class County {
 
     private String name;
 
-    public County(String name) {
+    @ManyToOne
+    private Country country;
+
+    public County(String name, Country country) {
         this.name = name;
+        this.country = country;
     }
 }

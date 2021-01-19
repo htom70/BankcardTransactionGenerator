@@ -16,14 +16,14 @@ public class ATM extends AbstractVendor {
     private String ATMcode;
 
     @ManyToOne
-    private Bank atmOwnerBank;
+    private Bank bank;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private City city;
 
-    public ATM(String ATMcode, City city) {
+    public ATM(String ATMcode, City city, Bank bank) {
         this.ATMcode = ATMcode;
         this.city = city;
-
+        this.bank = bank;
     }
 }

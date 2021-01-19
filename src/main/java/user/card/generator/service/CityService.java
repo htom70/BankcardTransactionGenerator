@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import user.card.generator.domain.city.City;
 import user.card.generator.domain.city.County;
+import user.card.generator.domain.country.Country;
 import user.card.generator.repository.CityRepository;
 import user.card.generator.repository.CountyRepository;
 
@@ -27,6 +28,9 @@ public class CityService {
     @Autowired
     CountyRepository countyRepository;
 
+    @Autowired
+    CountryService countryService;
+
     public void saveCity(City city) {
         cityRepository.save(city);
     }
@@ -41,6 +45,10 @@ public class CityService {
 
     public List<City> findByNameNotIn(List<String> citinames) {
         return cityRepository.findAllByNameNotIn(citinames);
+    }
+
+    public List<City> findAllByCountry(Country country) {
+        return cityRepository.findAllByCountry(country);
     }
 
     public List<City> findByNameIn(List<String> citieNames) {
@@ -105,7 +113,7 @@ public class CityService {
                 if (actualCountyName != "" && actualCountyName != null) {
                     County county = countyRepository.findByName(actualCountyName);
                     if (county == null) {
-                        county = new County(actualCountyName);
+                        county = new County(actualCountyName,countryService.findByCountryCode("HU"));
                         countyRepository.save(county);
                     }
                     city.setCounty(county);

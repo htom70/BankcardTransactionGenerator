@@ -6,4 +6,6 @@ import user.card.generator.domain.country.Country;
 
 @Repository
 public interface CountryRepository extends JpaRepository<Country, Long> {
+
+    public Country findByCountryCode(String countrycode);
 }

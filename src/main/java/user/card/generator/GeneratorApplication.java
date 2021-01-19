@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import user.card.generator.batch.person.PersonBatchInsertAsync;
 import user.card.generator.domain.BankInHungary;
 import user.card.generator.domain.city.City;
+import user.card.generator.domain.country.Country;
 import user.card.generator.domain.country.VendorGenerator;
 import user.card.generator.domain.vendor.ATM;
 import user.card.generator.domain.vendor.Bank;
@@ -64,6 +65,12 @@ public class GeneratorApplication implements CommandLineRunner {
     @Autowired
     VendorService vendorService;
 
+    @Autowired
+    CountryService countryService;
+
+    @Autowired
+    ATMservice atMservice;
+
     public static void main(String[] args) {
         SpringApplication.run(GeneratorApplication.class, args);
     }
@@ -84,13 +91,20 @@ public class GeneratorApplication implements CommandLineRunner {
 
 
 //        vendorGenerator.generate();
-//        cityService.citiesReadFromCsv();
 //        userGenerator.generatePerson(random);
 //        retiredDontUseCardTransactionGeneratorService.generate(random,currentYear.getYear());
 //        retiredUseCardTransactionGeneratorService.generate(random, currentYear);
 //        csvHandlerService.writeData("C:\\Users\\machine\\Documents\\MKI\\transaction.csv");
 //        probeUserGenerator.generate(random);
 //
+        countryService.generateCountries();
+        cityService.citiesReadFromCsv();
+        bankService.generateHungarianBanks();
+        Country country = countryService.findByCountryCode("HU");
+        System.out.println(country.toString());
+        List<City> citiesInHungary = cityService.findAllByCountry(country);
+        System.out.println(citiesInHungary.size());
+//        System.out.println(cityService.findAllByCountry(countryService.findByCountryCode("HU")));
         List<String> bigCityNames = new ArrayList<String>() {{
             add("Budapest");
             add("Szeged");
@@ -106,8 +120,10 @@ public class GeneratorApplication implements CommandLineRunner {
 
         List<City> bigCities = cityService.findByNameIn(bigCityNames);
         System.out.println("Big Cities count: " + bigCities.size());
+        atMservice.generateHungarianATMs();
 
-        vendorService.generateVendorsInHungary();
+
+//        vendorService.generateVendorsInHungary();
 
 //        cityService.findAllByNameIn(cities);
 
