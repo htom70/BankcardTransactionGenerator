@@ -16,7 +16,7 @@ public class YearlyTransaction extends AbstractTransaction {
     }
 
     @Override
-    public Map<LocalDate, List<SimplePreTransaction>> generate(List<LocalDate> days, TransactionProperty transactionProperty, TransactionType transactionType, Year year) {
+    public Map<LocalDate, List<SimplePreTransaction>> generate(List<LocalDate> days, TransactionProperty transactionProperty, Year year) {
         Map<LocalDate, List<SimplePreTransaction>> result = new HashMap<>();
         Random random = new Random();
         int occasionMin = transactionProperty.getYearlyOccasionMin();
@@ -33,7 +33,6 @@ public class YearlyTransaction extends AbstractTransaction {
             } while (result.get(date) != null);
             SimplePreTransaction simplePreTransaction = new SimplePreTransaction(date, amount, transactionType);
             result.put(date, Arrays.asList(simplePreTransaction));
-
         }
         return result;
     }

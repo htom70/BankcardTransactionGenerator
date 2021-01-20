@@ -18,7 +18,7 @@ public class MonthlyTransaction extends AbstractTransaction {
     }
 
     @Override
-    public Map<LocalDate, List<SimplePreTransaction>> generate(List<LocalDate> days, TransactionProperty transactionProperty, TransactionType transactionType, Year year) {
+    public Map<LocalDate, List<SimplePreTransaction>> generate(List<LocalDate> days, TransactionProperty transactionProperty, Year year) {
         Random random = new Random();
         Map<LocalDate, List<SimplePreTransaction>> result = new HashMap<>();
         int occasionMin = transactionProperty.getMonthlyOccasionMin();

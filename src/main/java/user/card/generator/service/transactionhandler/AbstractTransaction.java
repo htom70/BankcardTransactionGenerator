@@ -10,6 +10,6 @@ import java.util.Map;
 
 public abstract class AbstractTransaction {
 
-    public abstract Map<LocalDate,List<SimplePreTransaction>> generate(List<LocalDate> days, TransactionProperty transactionProperty, TransactionType transactionType, Year year);
+    public abstract Map<LocalDate,List<SimplePreTransaction>> generate(List<LocalDate> days, TransactionProperty transactionProperty, Year year);
 
 }
