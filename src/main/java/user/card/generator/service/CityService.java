@@ -92,7 +92,7 @@ public class CityService {
 
         Instant start = Instant.now();
         try {
-            reader = Files.newBufferedReader(Paths.get("C:\\Temp\\iranyitoszamok.csv"), Charset.forName("ISO-8859-1"));
+            reader = Files.newBufferedReader(Paths.get("C:\\Temp\\iranyitoszamok_utf8.csv"), Charset.forName("UTF-8"));
             CSVReader csvReader = new CSVReader(reader);
             List<String[]> records = csvReader.readAll();
             Iterator<String[]> iterator = records.iterator();

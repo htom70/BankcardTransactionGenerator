@@ -227,7 +227,7 @@ public class UserGenerator {
             } else if (numberForClassificationOfPersonsCity >= 20 && numberForClassificationOfPersonsCity < 22) {
                 person.setCity(citiesByNames.get("Gyor").get(0));
             } else if (numberForClassificationOfPersonsCity >= 22 && numberForClassificationOfPersonsCity < 24) {
-                person.setCity(citiesByNames.get("Gyor").get(0));
+                person.setCity(citiesByNames.get("Debrecen").get(0));
             } else if (numberForClassificationOfPersonsCity >= 24 && numberForClassificationOfPersonsCity < 26) {
                 person.setCity(citiesByNames.get("Miskolc").get(0));
             } else if (numberForClassificationOfPersonsCity >= 26 && numberForClassificationOfPersonsCity < 28) {

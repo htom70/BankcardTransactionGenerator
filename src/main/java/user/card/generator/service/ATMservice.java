@@ -51,7 +51,7 @@ public class ATMservice {
         City cityOfSzeged = cityService.findByName("Szeged");
         City cityOfMiskolc = cityService.findByName("Miskolc");
         City cityOfPecs = cityService.findByName("Pécs");
-        City cityOfGyor = cityService.findByName("Gy?r");
+        City cityOfGyor = cityService.findByName("Győr");
         City cityOfNyiregyhaza = cityService.findByName("Nyírergyháza");
         citiesInHungary.remove(cityOfBudapest);
         citiesInHungary.remove(cityOfGyor);

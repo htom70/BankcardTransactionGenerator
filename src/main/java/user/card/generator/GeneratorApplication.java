@@ -111,7 +111,7 @@ public class GeneratorApplication implements CommandLineRunner {
             add("Miskolc");
             add("Debrecen");
             add("Pécs");
-            add("Gy?r");
+            add("Győr");
             add("Nyíregyháza");
 
         }};

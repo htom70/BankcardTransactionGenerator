@@ -39,7 +39,7 @@ public class VendorService {
         add("Nyíregyháza");
         add("Miskolc");
         add("Pécs");
-        add("Gy?r");
+        add("Győr");
     }};
 
     public void saveAllVendors(List<Vendor> vendors) {
