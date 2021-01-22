@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import user.card.generator.domain.city.City;
 import user.card.generator.domain.transaction.Transaction;
+import user.card.generator.domain.vendor.Bank;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -25,6 +26,9 @@ public class Person {
     private PersonCategory personCategory;
 
     private int income;
+
+    @ManyToOne
+    private Bank bank;
 
     @OneToMany(fetch = FetchType.EAGER)
     protected Set<Transaction> transactions = new HashSet<>();

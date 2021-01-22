@@ -6,6 +6,7 @@ import user.card.generator.domain.city.City;
 import user.card.generator.domain.country.Country;
 import user.card.generator.domain.vendor.ATM;
 import user.card.generator.domain.vendor.Bank;
+import user.card.generator.domain.vendor.Vendor;
 import user.card.generator.repository.ATMrepository;
 import user.card.generator.service.singleton.NumberStringGenerator;
 
@@ -40,6 +41,14 @@ public class ATMservice {
 
     public void saveAllATMs(List<ATM> atms) {
         atMrepository.saveAll(atms);
+    }
+
+    public List<ATM> findAllByCity(City city) {
+        return atMrepository.findAllByCity(city);
+    }
+
+    public List<ATM> findAllByCityIsNot(City city) {
+        return atMrepository.findAllByCityIsNot(city);
     }
 
     public void generateHungarianATMs() {

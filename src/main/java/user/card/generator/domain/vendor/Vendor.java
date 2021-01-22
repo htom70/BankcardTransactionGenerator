@@ -1,5 +1,6 @@
 package user.card.generator.domain.vendor;
 
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import user.card.generator.domain.city.City;
 
@@ -7,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
+@Data
 @Entity
 @NoArgsConstructor
 @PrimaryKeyJoinColumn
@@ -22,3 +24,5 @@ public class Vendor extends AbstractVendor {
         this.city = city;
     }
 }
+
+

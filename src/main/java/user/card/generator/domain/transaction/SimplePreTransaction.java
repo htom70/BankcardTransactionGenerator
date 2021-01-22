@@ -12,5 +12,6 @@ public class SimplePreTransaction {
     private LocalDate date;
     private int amount;
     private TransactionType transactionType;
+    private String atmOrVendorCode;
 
 }

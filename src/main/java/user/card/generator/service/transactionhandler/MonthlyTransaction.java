@@ -1,7 +1,11 @@
 package user.card.generator.service.transactionhandler;
 
+import user.card.generator.domain.person.Person;
 import user.card.generator.domain.transaction.SimplePreTransaction;
 import user.card.generator.domain.transaction.TransactionType;
+import user.card.generator.domain.vendor.ATM;
+import user.card.generator.domain.vendor.AbstractVendor;
+import user.card.generator.domain.vendor.Vendor;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -12,9 +16,11 @@ import java.util.stream.Collectors;
 public class MonthlyTransaction extends AbstractTransaction {
 
     private TransactionType transactionType;
+    private Person person;
 
-    public MonthlyTransaction(TransactionType transactionType) {
+    public MonthlyTransaction(TransactionType transactionType, Person person) {
         this.transactionType = transactionType;
+        this.person = person;
     }
 
     @Override
@@ -39,10 +45,22 @@ public class MonthlyTransaction extends AbstractTransaction {
                 do {                                                //ne essen ugyanarra a napre több tranzakció
                     date = daysInCurrentmonth.get(random.nextInt(numberOfDayInCurrentMonth));
                 } while (result.get(date) != null);
-                SimplePreTransaction simplePreTransaction = new SimplePreTransaction(date, amount, transactionType);
+                SimplePreTransaction simplePreTransaction = new SimplePreTransaction(date, amount, transactionType,null);
                 result.put(date, Arrays.asList(simplePreTransaction));
             }
         }
         return result;
     }
+
+    @Override
+    public List<Vendor> selectVendors(TransactionType transactionType, Person person, double vendorInHomeCityRate, double atmInHomeCityRate) {
+        return null;
+    }
+
+    @Override
+    public List<ATM> selectATMs(TransactionType transactionType, Person person, double vendorInHomeCityRate, double atmInHomeCityRate, double bankOfAtmToBankOfUserRate) {
+        return null;
+    }
+
+
 }

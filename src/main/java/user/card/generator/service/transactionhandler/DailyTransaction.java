@@ -1,7 +1,11 @@
 package user.card.generator.service.transactionhandler;
 
+import user.card.generator.domain.person.Person;
 import user.card.generator.domain.transaction.SimplePreTransaction;
 import user.card.generator.domain.transaction.TransactionType;
+import user.card.generator.domain.vendor.ATM;
+import user.card.generator.domain.vendor.AbstractVendor;
+import user.card.generator.domain.vendor.Vendor;
 
 import java.time.LocalDate;
 import java.time.Year;
@@ -11,9 +15,11 @@ import java.util.stream.Collectors;
 public class DailyTransaction extends AbstractTransaction {
 
     private TransactionType transactionType;
+    private Person person;
 
-    public DailyTransaction(TransactionType transactionType) {
+    public DailyTransaction(TransactionType transactionType, Person person) {
         this.transactionType = transactionType;
+        this.person = person;
     }
 
     @Override
@@ -39,12 +45,24 @@ public class DailyTransaction extends AbstractTransaction {
                 amount = amountMin + random.nextInt(amountMax - amountMin);
                 dayIndex += occasionMin + random.nextInt(occasionMax - occasionMin);
             }
-            SimplePreTransaction simplePreTransaction = new SimplePreTransaction(date, amount, transactionType);
+            SimplePreTransaction simplePreTransaction = new SimplePreTransaction(date, amount, transactionType,"a");
             if (result.get(date) == null) {
                 result.put(date, Arrays.asList(simplePreTransaction));
             } else result.get(date).add(simplePreTransaction);
         }
         return result;
     }
+
+    @Override
+    public List<Vendor> selectVendors(TransactionType transactionType, Person person, double vendorInHomeCityRate, double atmInHomeCityRate) {
+        return null;
+    }
+
+    @Override
+    public List<ATM> selectATMs(TransactionType transactionType, Person person, double vendorInHomeCityRate, double atmInHomeCityRate, double bankOfAtmToBankOfUserRate) {
+        return null;
+    }
+
+
 }
 

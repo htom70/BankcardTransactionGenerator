@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import user.card.generator.domain.city.City;
+import user.card.generator.domain.vendor.AbstractVendor;
 import user.card.generator.domain.vendor.Vendor;
 import user.card.generator.repository.VendorRepository;
 import user.card.generator.service.singleton.NumberStringGenerator;
@@ -44,6 +45,14 @@ public class VendorService {
 
     public void saveAllVendors(List<Vendor> vendors) {
         vendorRepository.saveAll(vendors);
+    }
+
+    public List<Vendor> findAllByCity(City city) {
+        return vendorRepository.findAllByCity(city);
+    }
+
+    public List<Vendor> findAllByCityIsNot(City city) {
+        return vendorRepository.findAllByCityIsNot(city);
     }
 
     @Transactional

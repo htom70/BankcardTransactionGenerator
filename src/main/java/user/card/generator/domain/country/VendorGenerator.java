@@ -3,6 +3,7 @@ package user.card.generator.domain.country;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import user.card.generator.domain.vendor.AbstractVendor;
+import user.card.generator.domain.vendor.Vendor;
 import user.card.generator.repository.CountryRepository;
 import user.card.generator.repository.VendorRepository;
 
@@ -50,8 +51,8 @@ public class VendorGenerator {
 //                do {
 //                    generatedVendorCode = generateVendorString(random);
 //                } while (vendorRepository.findByVendorCode(generatedVendorCode) != null);
-////                AbstractVendor vendor = new AbstractVendor(generatedVendorCode);
-////                vendor.setCountry(country);
+//                AbstractVendor vendor = new Vendor(generatedVendorCode);
+//                vendor.setCountry(country);
 //                vendorRepository.save(vendor);
 //                result.add(vendor);
 //            }
