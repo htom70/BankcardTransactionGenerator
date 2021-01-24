@@ -47,6 +47,10 @@ public class VendorService {
         vendorRepository.saveAll(vendors);
     }
 
+    public List<Vendor> findAll() {
+        return vendorRepository.findAll();
+    }
+
     public List<Vendor> findAllByCity(City city) {
         return vendorRepository.findAllByCity(city);
     }
@@ -67,7 +71,7 @@ public class VendorService {
                 if (vendorCodeListIterator.hasNext()) {
                     String currentVendorCode = vendorCodeListIterator.next();
                     City currentCity = cityService.findByName(cityKey);
-                    Vendor vendor = new Vendor(currentVendorCode,currentCity);
+                    Vendor vendor = new Vendor(currentVendorCode, currentCity);
                     vendors.add(vendor);
                     vendorCodeListIterator.remove();
                 }
@@ -75,7 +79,7 @@ public class VendorService {
         }
         List<City> littleCities = cityService.findByNameNotIn(CITI_NAMES_WITHOUT_BIG_CITIES);
         for (City currentCity : littleCities) {
-            for (int i = 0; i <10 ; i++) {
+            for (int i = 0; i < 10; i++) {
                 if (vendorCodeListIterator.hasNext()) {
                     String currentVendorCode = vendorCodeListIterator.next();
                     Vendor vendor = new Vendor(currentVendorCode, currentCity);

@@ -22,6 +22,5 @@ public class County {
 
     public County(String name, Country country) {
         this.name = name;
-        this.country = country;
     }
 }

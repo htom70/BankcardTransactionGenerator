@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class TransactionContainer {
+public class GeneralTransactionContainer {
 
     private List<GeneralTypedTransaction> transactionItems = new ArrayList<>();
 

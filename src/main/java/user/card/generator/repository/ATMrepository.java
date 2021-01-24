@@ -10,8 +10,6 @@ import java.util.List;
 @Repository
 public interface ATMrepository extends JpaRepository<ATM,Long> {
 
-    public List<ATM> findAllByCityIn(List<City> cities);
-
     public List<ATM> findAllByCity(City city);
 
     public List<ATM> findAllByCityIsNot(City city);

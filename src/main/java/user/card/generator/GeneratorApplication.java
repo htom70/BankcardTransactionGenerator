@@ -5,28 +5,22 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import user.card.generator.batch.person.PersonBatchInsertAsync;
-import user.card.generator.domain.BankInHungary;
 import user.card.generator.domain.city.City;
 import user.card.generator.domain.country.Country;
 import user.card.generator.domain.country.VendorGenerator;
 import user.card.generator.domain.transaction.TransactionType;
-import user.card.generator.domain.vendor.ATM;
-import user.card.generator.domain.vendor.AbstractVendor;
-import user.card.generator.domain.vendor.Bank;
 import user.card.generator.domain.vendor.Vendor;
 import user.card.generator.repository.ATMrepository;
 import user.card.generator.repository.BankRepository;
 import user.card.generator.repository.TransactionRepository;
 import user.card.generator.repository.VendorRepository;
 import user.card.generator.service.*;
-import user.card.generator.service.transaction.container.TransactionContainer;
+import user.card.generator.service.transaction.container.GeneralTransactionContainer;
 import user.card.generator.service.transaction.kind.*;
-import user.card.generator.service.transaction.periodically.DailyTransaction;
 import user.card.generator.service.transaction.periodically.PeriodicallyTransactionFactory;
 import user.card.generator.service.transaction.periodically.PeriodicallyTransactionType;
 import user.card.generator.time.CurrentYear;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -135,21 +129,21 @@ public class GeneratorApplication implements CommandLineRunner {
         List<Vendor> vendorsNotIn = vendorRepository.findAllByCityIsNot(citiesInHungary.get(1));
         System.out.println(vendorsNotIn.size());
 
-        TransactionContainer transactionContainer = new TransactionContainer();
+        GeneralTransactionContainer generalTransactionContainer = new GeneralTransactionContainer();
         GeneralTypedTransaction POSTypedTransaction = TypedTransactionFactory.create(TransactionType.POS);
         POSTypedTransaction.addGeneralPeriodicallyTransaction(PeriodicallyTransactionFactory.create(PeriodicallyTransactionType.DAILY));
         POSTypedTransaction.addGeneralPeriodicallyTransaction(PeriodicallyTransactionFactory.create(PeriodicallyTransactionType.MONTHLY));
-        transactionContainer.addGeneralTypedTransaction(POSTypedTransaction);
+        generalTransactionContainer.addGeneralTypedTransaction(POSTypedTransaction);
 
         GeneralTypedTransaction ATMtypedTransaction = TypedTransactionFactory.create(TransactionType.ATM);
         ATMtypedTransaction.addGeneralPeriodicallyTransaction(PeriodicallyTransactionFactory.create(PeriodicallyTransactionType.INTER_DAILY));
         ATMtypedTransaction.addGeneralPeriodicallyTransaction(PeriodicallyTransactionFactory.create(PeriodicallyTransactionType.SATURDAY));
-        transactionContainer.addGeneralTypedTransaction(ATMtypedTransaction);
+        generalTransactionContainer.addGeneralTypedTransaction(ATMtypedTransaction);
 
         GeneralTypedTransaction NETtypedTransaction = TypedTransactionFactory.create(TransactionType.NET);
         NETtypedTransaction.addGeneralPeriodicallyTransaction(PeriodicallyTransactionFactory.create(PeriodicallyTransactionType.ONCE_MONTHLY));
-        transactionContainer.addGeneralTypedTransaction(NETtypedTransaction);
-        transactionContainer.process();
+        generalTransactionContainer.addGeneralTypedTransaction(NETtypedTransaction);
+        generalTransactionContainer.process();
 
 //        vendorService.generateVendorsInHungary();
 
