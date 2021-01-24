@@ -11,18 +11,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public  abstract class GeneralTypedTransaction {
+public  class GeneralTransaction {
 
     protected TransactionType transactionType;
-    protected VendorAndAtmSelector vendorAndAtmSelector;
-    protected List<GeneralPeriodicallyTransaction> generalPeriodicallyTransactions = new ArrayList<>();
     protected Map<GeneralPeriodicallyTransaction, VendorSelector> periodicallyTransactionVendorSelectors = new HashMap<>();
     protected Map<GeneralPeriodicallyTransaction, AtmSelector> periodicallyTransactionAtmSelectors = new HashMap<>();
 
-    public abstract void process();
-
-    public void addGeneralPeriodicallyTransaction(GeneralPeriodicallyTransaction generalPeriodicallyTransaction) {
-        generalPeriodicallyTransactions.add(generalPeriodicallyTransaction);
+    public GeneralTransaction(TransactionType transactionType) {
+        this.transactionType = transactionType;
     }
+
+    public void addVendorSelector(Map<GeneralPeriodicallyTransaction, VendorSelector> selectorMap) {
+        periodicallyTransactionVendorSelectors.putAll(selectorMap);
+    }
+
+    public void addAtmSelector(Map<GeneralPeriodicallyTransaction, AtmSelector> selectorMap) {
+        periodicallyTransactionAtmSelectors.putAll(selectorMap);
+    }
+
+    public void process() {
+
+    }
+
 
 }

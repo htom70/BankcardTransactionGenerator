@@ -129,21 +129,21 @@ public class GeneratorApplication implements CommandLineRunner {
         List<Vendor> vendorsNotIn = vendorRepository.findAllByCityIsNot(citiesInHungary.get(1));
         System.out.println(vendorsNotIn.size());
 
-        GeneralTransactionContainer generalTransactionContainer = new GeneralTransactionContainer();
-        GeneralTypedTransaction POSTypedTransaction = TypedTransactionFactory.create(TransactionType.POS);
-        POSTypedTransaction.addGeneralPeriodicallyTransaction(PeriodicallyTransactionFactory.create(PeriodicallyTransactionType.DAILY));
-        POSTypedTransaction.addGeneralPeriodicallyTransaction(PeriodicallyTransactionFactory.create(PeriodicallyTransactionType.MONTHLY));
-        generalTransactionContainer.addGeneralTypedTransaction(POSTypedTransaction);
-
-        GeneralTypedTransaction ATMtypedTransaction = TypedTransactionFactory.create(TransactionType.ATM);
-        ATMtypedTransaction.addGeneralPeriodicallyTransaction(PeriodicallyTransactionFactory.create(PeriodicallyTransactionType.INTER_DAILY));
-        ATMtypedTransaction.addGeneralPeriodicallyTransaction(PeriodicallyTransactionFactory.create(PeriodicallyTransactionType.SATURDAY));
-        generalTransactionContainer.addGeneralTypedTransaction(ATMtypedTransaction);
-
-        GeneralTypedTransaction NETtypedTransaction = TypedTransactionFactory.create(TransactionType.NET);
-        NETtypedTransaction.addGeneralPeriodicallyTransaction(PeriodicallyTransactionFactory.create(PeriodicallyTransactionType.ONCE_MONTHLY));
-        generalTransactionContainer.addGeneralTypedTransaction(NETtypedTransaction);
-        generalTransactionContainer.process();
+//        GeneralTransactionContainer generalTransactionContainer = new GeneralTransactionContainer();
+//        GeneralTypedTransaction POSTypedTransaction = TypedTransactionFactory.create(TransactionType.POS);
+//        POSTypedTransaction.addGeneralPeriodicallyTransaction(PeriodicallyTransactionFactory.create(PeriodicallyTransactionType.DAILY));
+//        POSTypedTransaction.addGeneralPeriodicallyTransaction(PeriodicallyTransactionFactory.create(PeriodicallyTransactionType.MONTHLY));
+//        generalTransactionContainer.addGeneralTypedTransaction(POSTypedTransaction);
+//
+//        GeneralTypedTransaction ATMtypedTransaction = TypedTransactionFactory.create(TransactionType.ATM);
+//        ATMtypedTransaction.addGeneralPeriodicallyTransaction(PeriodicallyTransactionFactory.create(PeriodicallyTransactionType.INTER_DAILY));
+//        ATMtypedTransaction.addGeneralPeriodicallyTransaction(PeriodicallyTransactionFactory.create(PeriodicallyTransactionType.SATURDAY));
+//        generalTransactionContainer.addGeneralTypedTransaction(ATMtypedTransaction);
+//
+//        GeneralTypedTransaction NETtypedTransaction = TypedTransactionFactory.create(TransactionType.NET);
+//        NETtypedTransaction.addGeneralPeriodicallyTransaction(PeriodicallyTransactionFactory.create(PeriodicallyTransactionType.ONCE_MONTHLY));
+//        generalTransactionContainer.addGeneralTypedTransaction(NETtypedTransaction);
+//        generalTransactionContainer.process();
 
 //        vendorService.generateVendorsInHungary();
 

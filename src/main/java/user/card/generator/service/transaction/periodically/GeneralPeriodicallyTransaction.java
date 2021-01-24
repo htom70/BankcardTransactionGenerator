@@ -8,7 +8,5 @@ import java.util.Map;
 
 public abstract class GeneralPeriodicallyTransaction {
 
-//    Map<LocalDate, List<SimplePreTransaction>> generatePretransactions();
-
-    public abstract void processTypedTransaction();
+    public abstract Map<LocalDate,List<SimplePreTransaction>> processTypedTransaction(List<LocalDate> days);
 }

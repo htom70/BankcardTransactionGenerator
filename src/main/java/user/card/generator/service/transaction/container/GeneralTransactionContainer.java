@@ -1,7 +1,7 @@
 package user.card.generator.service.transaction.container;
 
 import lombok.Data;
-import user.card.generator.service.transaction.kind.GeneralTypedTransaction;
+import user.card.generator.service.transaction.kind.GeneralTransaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,14 +9,14 @@ import java.util.List;
 @Data
 public class GeneralTransactionContainer {
 
-    private List<GeneralTypedTransaction> transactionItems = new ArrayList<>();
+    private List<GeneralTransaction> transactionItems = new ArrayList<>();
 
-    public void addGeneralTypedTransaction(GeneralTypedTransaction generalTypedTransaction) {
-        transactionItems.add(generalTypedTransaction);
+    public void addGeneralTypedTransaction(GeneralTransaction generalTransaction) {
+        transactionItems.add(generalTransaction);
     }
 
     public void process() {
-        for (GeneralTypedTransaction t : transactionItems) {
+        for (GeneralTransaction t : transactionItems) {
             t.process();
         }
     }

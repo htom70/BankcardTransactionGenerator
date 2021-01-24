@@ -1,11 +1,15 @@
 package user.card.generator.service.transaction.periodically;
 
-import user.card.generator.service.transaction.kind.GeneralTypedTransaction;
+import user.card.generator.domain.transaction.SimplePreTransaction;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 public class DailyTransaction extends GeneralPeriodicallyTransaction {
 
     @Override
-    public void processTypedTransaction() {
-        System.out.println("daily transaction");
+    public Map<LocalDate, List<SimplePreTransaction>> processTypedTransaction(List<LocalDate> days) {
+        return null;
     }
 }

@@ -19,7 +19,6 @@ public class AtmSelector {
     private int privateBankPercent;
     private List<ATM> atmsNotInCity = new ArrayList<>();
     private List<ATM> atmsInHomeCity = new ArrayList<>();
-    private List<ATM> atmsByBank = new ArrayList<>();
     private Random random;
 
     public AtmSelector(int homeRatePercent, int privateBankPercent) {

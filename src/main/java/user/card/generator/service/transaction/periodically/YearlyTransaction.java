@@ -1,8 +1,15 @@
 package user.card.generator.service.transaction.periodically;
 
+import user.card.generator.domain.transaction.SimplePreTransaction;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
 public class YearlyTransaction extends GeneralPeriodicallyTransaction{
+
     @Override
-    public void processTypedTransaction() {
-        System.out.println("yearly transaction");
+    public Map<LocalDate, List<SimplePreTransaction>> processTypedTransaction(List<LocalDate> days) {
+        return null;
     }
 }
