@@ -39,8 +39,7 @@ public class Transaction {
     private ResponseCode responseCode;
     private String countryName;
     private String vendorCode;
-    private ProductCategory productCategory;
-    private BankInHungary atmOwnerBank;
+
     private Double field1;
     private Double field2;
     private Double field3;
@@ -84,7 +83,7 @@ public class Transaction {
 
 
     public Transaction(String cardNumber, TransactionType transactionType, Timestamp timestamp, int amount, String currencyName, ResponseCode responseCode, String countryName,
-                       String vendorCode, ProductCategory productCategory, BankInHungary atmOwnerBank) {
+                       String vendorCode) {
         this.transactionType = transactionType;
         this.timestamp = timestamp;
         this.amount = amount;
@@ -92,8 +91,6 @@ public class Transaction {
         this.responseCode = responseCode;
         this.countryName = countryName;
         this.vendorCode = vendorCode;
-        this.productCategory = productCategory;
-        this.atmOwnerBank = atmOwnerBank;
         this.cardNumber = cardNumber;
     }
 

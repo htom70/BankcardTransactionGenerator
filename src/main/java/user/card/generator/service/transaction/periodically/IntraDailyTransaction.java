@@ -6,10 +6,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-public class IntraDailyTransaction extends GeneralPeriodicallyTransaction{
+public class IntraDailyTransaction extends GeneralTimeTypedTransaction {
 
     @Override
-    public Map<LocalDate, List<SimplePreTransaction>> processTypedTransaction(List<LocalDate> days) {
+    public Map<LocalDate, List<SimplePreTransaction>> processTimeTypedTransaction(List<LocalDate> days) {
         return null;
     }
 }

@@ -3,7 +3,6 @@ package user.card.generator.time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Year;
 import java.util.Random;
 
 public class TimestampGenerator {

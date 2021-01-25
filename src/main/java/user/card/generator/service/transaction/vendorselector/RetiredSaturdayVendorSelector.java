@@ -30,7 +30,7 @@ public class RetiredSaturdayVendorSelector implements VendorSelector {
     private void getVendorsInHomeCity(Person person) {
         Random random = new Random();
         List<Vendor> vendors = vendorService.findAllByCity(person.getCity());
-        int numberOfUsedVendors = 1 + random.nextInt(1);
+        int numberOfUsedVendors = 3 + random.nextInt(1);
         int numberOfVendorsByCity = vendors.size();
         for (int i = 0; i < numberOfUsedVendors; i++) {
             selectedVendors.add(vendors.get(random.nextInt(numberOfVendorsByCity)));

@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-public abstract class GeneralPeriodicallyTransaction {
+public abstract class GeneralTimeTypedTransaction {
 
-    public abstract Map<LocalDate,List<SimplePreTransaction>> processTypedTransaction(List<LocalDate> days);
+    public abstract Map<LocalDate,List<SimplePreTransaction>> processTimeTypedTransaction(List<LocalDate> days);
 }

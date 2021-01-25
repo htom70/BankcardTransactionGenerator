@@ -5,23 +5,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import user.card.generator.batch.person.PersonBatchInsertAsync;
-import user.card.generator.domain.city.City;
-import user.card.generator.domain.country.Country;
 import user.card.generator.domain.country.VendorGenerator;
-import user.card.generator.domain.transaction.TransactionType;
-import user.card.generator.domain.vendor.Vendor;
 import user.card.generator.repository.ATMrepository;
 import user.card.generator.repository.BankRepository;
 import user.card.generator.repository.TransactionRepository;
 import user.card.generator.repository.VendorRepository;
 import user.card.generator.service.*;
-import user.card.generator.service.transaction.container.GeneralTransactionContainer;
-import user.card.generator.service.transaction.kind.*;
-import user.card.generator.service.transaction.periodically.PeriodicallyTransactionFactory;
-import user.card.generator.service.transaction.periodically.PeriodicallyTransactionType;
 import user.card.generator.time.CurrentYear;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @SpringBootApplication
@@ -29,15 +24,6 @@ public class GeneratorApplication implements CommandLineRunner {
 
     @Autowired
     private VendorGenerator vendorGenerator;
-
-    @Autowired
-    private UserGenerator userGenerator;
-
-    @Autowired
-    RetiredDontUseCardTransactionGeneratorService retiredDontUseCardTransactionGeneratorService;
-
-//    @Autowired
-//    RetiredUseCardTransactionGeneratorService retiredUseCardTransactionGeneratorService;
 
     @Autowired
     CSVHandlerService csvHandlerService;
@@ -81,7 +67,12 @@ public class GeneratorApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Random random = new Random();
 
-        CurrentYear currentYear = new CurrentYear(2008);
+        CurrentYear currentYear = new CurrentYear(2012);
+        List<LocalDate> daysInYear = currentYear.getDays();
+        Map<Integer, List<LocalDate>> monthAndDays = currentYear.getMonthsAndDaysInMonth(daysInYear);
+        for (Map.Entry<Integer, List<LocalDate>> entry : monthAndDays.entrySet()) {
+            System.out.println("Hónap: " + Month.of(entry.getKey()) + "; napok száma: " + entry.getValue().size());
+        }
 //        List<City> cities = csvHandlerService.citiesReadFromCsv();
 //        cityBatchInsertAsync.batchInsertAsync(cities);
 //        List<Person> people = new ArrayList<>();
@@ -101,9 +92,9 @@ public class GeneratorApplication implements CommandLineRunner {
 //        countryService.generateCountries();
 //        cityService.citiesReadFromCsv();
 //        bankService.generateHungarianBanks();
-        Country country = countryService.findByCountryCode("HU");
+//        Country country = countryService.findByCountryCode("HU");
 //        System.out.println(country.toString());
-        List<City> citiesInHungary = cityService.findAllByCountry(country);
+//        List<City> citiesInHungary = cityService.findAllByCountry(country);
 //        System.out.println(citiesInHungary.size());
 ////        System.out.println(cityService.findAllByCountry(countryService.findByCountryCode("HU")));
 //        List<String> bigCityNames = new ArrayList<String>() {{
@@ -122,12 +113,12 @@ public class GeneratorApplication implements CommandLineRunner {
 //        List<City> bigCities = cityService.findByNameIn(bigCityNames);
 //        System.out.println("Big Cities count: " + bigCities.size());
 //        atMservice.generateHungarianATMs();
-        System.out.println("IN");
-        List<Vendor> vendorsInCity = vendorRepository.findAllByCity(citiesInHungary.get(1));
-        System.out.println(vendorsInCity.size());
-        System.out.println("NOT IN");
-        List<Vendor> vendorsNotIn = vendorRepository.findAllByCityIsNot(citiesInHungary.get(1));
-        System.out.println(vendorsNotIn.size());
+//        System.out.println("IN");
+//        List<Vendor> vendorsInCity = vendorRepository.findAllByCity(citiesInHungary.get(1));
+//        System.out.println(vendorsInCity.size());
+//        System.out.println("NOT IN");
+//        List<Vendor> vendorsNotIn = vendorRepository.findAllByCityIsNot(citiesInHungary.get(1));
+//        System.out.println(vendorsNotIn.size());
 
 //        GeneralTransactionContainer generalTransactionContainer = new GeneralTransactionContainer();
 //        GeneralTypedTransaction POSTypedTransaction = TypedTransactionFactory.create(TransactionType.POS);

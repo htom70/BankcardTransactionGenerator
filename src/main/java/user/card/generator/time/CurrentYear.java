@@ -94,6 +94,21 @@ public class CurrentYear {
         return daysOfMonths;
     }
 
+    public Map<Integer, List<LocalDate>> getMonthsAndDaysInMonth(List<LocalDate> days) {
+        Map<Integer, List<LocalDate>> result = new HashMap<>();
+        for (int i = 1; i <= 12; i++) {
+            Month currentMonth = Month.of(i);
+            int lengthOfMonth = currentMonth.length(year.isLeap());
+            LocalDate startDate = LocalDate.of(year.getValue(), currentMonth.getValue(), 1);
+            LocalDate endDate = LocalDate.of(year.getValue(), currentMonth.getValue(), lengthOfMonth);
+            List<LocalDate> daysOfMonth  = days.stream()
+                    .filter(date -> (date.equals(startDate) || date.isAfter(startDate)) && (date.equals(endDate) || date.isBefore(endDate)))
+                    .collect(Collectors.toList());
+            result.put(i, daysOfMonth);
+        }
+        return result;
+    }
+
 
 
 

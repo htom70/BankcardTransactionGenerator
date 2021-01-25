@@ -46,7 +46,7 @@ public class CSVHandlerService {
             for (Transaction transaction : transactions) {
                 String[] data = {transaction.getCardNumber(), transaction.getTransactionType().toString(), String.valueOf(transaction.getTimestamp()),
                         String.valueOf(transaction.getAmount()), transaction.getCurrencyName(), transaction.getCountryName(), transaction.getResponseCode().toString(),
-                        transaction.getVendorCode(), transaction.getProductCategory().toString(), "BB", transaction.getAtmOwnerBank().toString()};
+                        transaction.getVendorCode(), "BB"};
                 writer.writeNext(data, true);
             }
             writer.close();
