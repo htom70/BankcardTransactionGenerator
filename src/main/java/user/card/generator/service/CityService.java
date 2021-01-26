@@ -64,7 +64,7 @@ public class CityService {
         City cityOfNyiregyhaza = cityRepository.findByName("Nyíregyháza");
         City cityOfMiskolc = cityRepository.findByName("Miskolc");
         City cityOfPécs = cityRepository.findByName("Pécs");
-        City cityOfGyor = cityRepository.findByName("Gy?r");
+        City cityOfGyor = cityRepository.findByName("Győr");
         result.put("Budapest", new ArrayList<>(Arrays.asList(cityOfBudapest)));
         result.put("Debrecen", new ArrayList<>(Arrays.asList(cityIOfDebrecen)));
         result.put("Szeged", new ArrayList<>(Arrays.asList(cityOfSzeged)));
@@ -113,7 +113,9 @@ public class CityService {
                 if (actualCountyName != "" && actualCountyName != null) {
                     County county = countyRepository.findByName(actualCountyName);
                     if (county == null) {
-                        county = new County(actualCountyName,countryService.findByCountryCode("HU"));
+                        Country country = countryService.findByCountryCode("HU");
+                        county = new County(actualCountyName, country);
+
                         countyRepository.save(county);
                     }
                     city.setCounty(county);
@@ -127,11 +129,6 @@ public class CityService {
             System.out.println("Elapsed time: " + elapsedTime);
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        County county = countyRepository.findByName("Pest");
-        List<City> citiesInPestMegye = cityRepository.findByCounty(county);
-        for (City city : citiesInPestMegye) {
-            System.out.println(city);
         }
     }
 }

@@ -27,7 +27,7 @@ import java.util.Random;
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
 
@@ -80,6 +80,7 @@ public class Transaction {
     private LocalDate field38;
     private LocalDate field39;
     private LocalDate field40;
+    private boolean fraud;
 
 
     public Transaction(String cardNumber, TransactionType transactionType, Timestamp timestamp, int amount, String currencyName, ResponseCode responseCode, String countryName,
@@ -104,100 +105,100 @@ public class Transaction {
         if (rate < 80) {
             setField3(fieldGenerator.generateFromZeroToOne(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 60) {
             setField4(fieldGenerator.generateFromZeroToOne(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 40) {
             setField5(fieldGenerator.generateFromZeroToOne(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 20) {
             setField6(fieldGenerator.generateFromZeroToOne(random));
         }
         setField7(fieldGenerator.generateFromMinusOneToOne(random));
         setField8(fieldGenerator.generateFromMinusOneToOne(random));
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 80) {
             setField9(fieldGenerator.generateFromMinusOneToOne(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 60) {
             setField10(fieldGenerator.generateFromMinusOneToOne(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 40) {
             setField11(fieldGenerator.generateFromMinusOneToOne(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 20) {
             setField12(fieldGenerator.generateFromMinusOneToOne(random));
         }
         setField13(fieldGenerator.generateFromMinusThousandToThousand(random));
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 80) {
             setField14(fieldGenerator.generateFromMinusThousandToThousand(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 60) {
             setField15(fieldGenerator.generateFromMinusThousandToThousand(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 20) {
             setField16(fieldGenerator.generateFromMinusThousandToThousand(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 60) {
             setField17(fieldGenerator.generateFromZeroToFiveHundredThousand(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 40) {
             setField18(fieldGenerator.generateFromZeroToFiveHundredThousand(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 20) {
             setField19(fieldGenerator.generateFromZeroToFiveHundredThousand(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 20) {
             setField20(fieldGenerator.generateFromZeroToFiveHundredThousand(random));
         }
         setField21(fieldGenerator.generateFromMinusHundredToHundred(random));
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 70) {
             setField22(fieldGenerator.generateFromMinusHundredToHundred(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 50) {
             setField23(fieldGenerator.generateFromMinusHundredToHundred(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 30) {
             setField24(fieldGenerator.generateFromMinusHundredToHundred(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 10) {
             setField25(fieldGenerator.generateFromMinusHundredToHundred(random));
         }
         setField26(fieldGenerator.generateMixedLastName(random));
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 60) {
             setField27(fieldGenerator.generateMixedLastName(random));
         }
         setField28(fieldGenerator.generateWomanLastName(random));
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 50) {
             setField29(fieldGenerator.generateWomanLastName(random));
         }
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 80) {
             if (checkIfField26containsAWomanName()) {
                 setField30(fieldGenerator.generateWomanLastName(random));
             }
         }
         setField31(fieldGenerator.generateCityName(random,cities));
-        rate = random.nextInt(100);
+//        rate = random.nextInt(100);
         if (rate < 80) {
             setField32(fieldGenerator.generateCityName(random,cities));
         }
@@ -206,17 +207,21 @@ public class Transaction {
         setField33(currentCity.getName());
         setField34(currentCity.getName());
         setField35(fieldGenerator.generateCountyCode(currentCity));
-        setField36(fieldGenerator.generateDate(random, LocalDate.of(1940, 1, 1), LocalDate.of(2020, 12, 31)));
-        setField37(fieldGenerator.generateDate(random, LocalDate.of(1990, 1, 1), LocalDate.of(2020, 12, 31)));
-        setField38(fieldGenerator.generateDate(random, LocalDate.of(2020, 1, 1), LocalDate.of(2020, 12, 31)));
+        setField36(fieldGenerator.generateDate(random, 1940, 2020));
+        setField37(fieldGenerator.generateDate(random, 1990,2020));
+        setField38(fieldGenerator.generateDate(random, 2020, 2020));
         rate = random.nextInt(100);
         if (rate < 70) {
-            setField39(fieldGenerator.generateDate(random, LocalDate.of(2020, 1, 1), LocalDate.of(2020, 12, 31)));
+            setField39(fieldGenerator.generateDate(random, 2020,2020));
         }
         rate = random.nextInt(100);
         if (rate < 50) {
-            setField40(fieldGenerator.generateDate(random, LocalDate.of(2020, 1, 1), LocalDate.of(2020, 12, 31)));
+            setField40(fieldGenerator.generateDate(random, 2020,2020));
         }
+    }
+
+    public void setFraud(boolean fraud) {
+        this.fraud = fraud;
     }
 
     private boolean checkIfField26containsAWomanName() {

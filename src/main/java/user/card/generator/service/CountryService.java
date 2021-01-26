@@ -24,8 +24,13 @@ public class CountryService {
         countryRepository.saveAll(countries);
     }
 
+    public List<Country> findAll() {
+        return countryRepository.findAll();
+    }
+
+
     public Country findByCountryCode(String countryCode) {
-       return countryRepository.findByCountryCode(countryCode);
+        return countryRepository.findByCountryCode(countryCode);
     }
 
     public void generateCountries() {

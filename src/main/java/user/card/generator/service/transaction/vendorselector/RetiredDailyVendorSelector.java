@@ -1,19 +1,21 @@
 package user.card.generator.service.transaction.vendorselector;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import user.card.generator.domain.person.Person;
 import user.card.generator.domain.vendor.Vendor;
 import user.card.generator.service.VendorService;
-import user.card.generator.service.transaction.vendorselector.VendorSelector;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@Service
 public class RetiredDailyVendorSelector implements VendorSelector {
 
     @Autowired
     VendorService vendorService;
+
 
     private List<Vendor> selectedVendors = new ArrayList<>();
 

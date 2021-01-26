@@ -2,8 +2,10 @@ package user.card.generator.domain.vendor;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import user.card.generator.domain.city.City;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -11,6 +13,8 @@ import javax.persistence.ManyToOne;
 @Entity
 @NoArgsConstructor
 @Data
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ATM extends AbstractVendor {
 
     private String ATMcode;

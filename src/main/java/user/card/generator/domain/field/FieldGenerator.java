@@ -5,6 +5,8 @@ import user.card.generator.domain.name.ManName;
 import user.card.generator.domain.name.WomanName;
 
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.Year;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -51,12 +53,19 @@ public class FieldGenerator {
         return manNames[random.nextInt(manNames.length)].toString();
     }
 
-    public LocalDate generateDate(Random random, LocalDate startDate, LocalDate endDate) {
-        List<LocalDate> days = Stream.iterate(startDate, date -> date.plusDays(1))
-                .filter(date -> date.isBefore(endDate))
-                .collect(Collectors.toList());
-        int size = days.size();
-        return days.get(random.nextInt(size));
+    public LocalDate generateDate(Random random, int beginYear, int endYear) {
+        int yearNumber;
+        if (beginYear == endYear) {
+            yearNumber = endYear;
+        } else {
+            yearNumber = beginYear + random.nextInt(endYear - beginYear);
+        }
+        int monthNumber = random.nextInt(12) + 1;
+        Month month = Month.of(monthNumber);
+        Year year = Year.of(yearNumber);
+        int lengthOfMonth = month.length(year.isLeap());
+        int dayNumber = random.nextInt(lengthOfMonth) + 1;
+        return LocalDate.of(yearNumber, monthNumber, dayNumber);
     }
 
     public String generateCityName(Random random, List<City> cities) {

@@ -1,5 +1,6 @@
 package user.card.generator.domain.country;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,8 +14,7 @@ import javax.persistence.*;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class Country {
 
     @Id

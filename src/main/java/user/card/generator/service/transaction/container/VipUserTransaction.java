@@ -1,6 +1,8 @@
 package user.card.generator.service.transaction.container;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import user.card.generator.domain.ResponseCode;
 import user.card.generator.domain.city.City;
 import user.card.generator.domain.country.Country;
@@ -28,6 +30,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Service
 public class VipUserTransaction {
 
     @Autowired
@@ -39,6 +42,10 @@ public class VipUserTransaction {
     @Autowired
     CityService cityService;
 
+    @Autowired
+    AtmSelector atmSelector;
+
+    @Transactional
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
         Random random = new Random();
         Country country = countryService.findByCountryCode("HU");
@@ -66,12 +73,11 @@ public class VipUserTransaction {
                             Transaction transaction = new Transaction(preTransaction.getCardNumber(), preTransaction.getTransactionType()
                                     , preTransaction.getTimestamp(), preTransaction.getAmount(), "HUF", ResponseCode.OK, "HU", preTransaction.getVendorCode());
                             transaction.setAllFields(cities);
+                            transaction.setFraud(false);
                             transactions.add(transaction);
                         }
                     }
                 }
-
-                transactionService.saveAll(transactions);
             }
         }
         transactionService.saveAll(transactions);
@@ -83,7 +89,8 @@ public class VipUserTransaction {
             LocalDate day = daysInCurrentMonth.get(random.nextInt(daysInCurrentMonth.size()));
             int amount = 50000 + random.nextInt(150001);
             Timestamp timestamp = TimestampGenerator.generate(random, day);
-            AtmSelector atmSelector = new AtmSelector(90, 70);
+            atmSelector.setHomeRatePercent(90);
+            atmSelector.setPrivateBankPercent(70);
             ATM atm = atmSelector.selectAtm(person);
             PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.ATM, timestamp, amount
                     , "HUF", ResponseCode.OK, "HU", atm.getATMcode());

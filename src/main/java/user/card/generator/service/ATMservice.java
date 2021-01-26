@@ -43,6 +43,10 @@ public class ATMservice {
         atMrepository.saveAll(atms);
     }
 
+    public List<ATM> findAll() {
+        return atMrepository.findAll();
+    }
+
     public List<ATM> findAllByCity(City city) {
         return atMrepository.findAllByCity(city);
     }
@@ -61,7 +65,7 @@ public class ATMservice {
         City cityOfMiskolc = cityService.findByName("Miskolc");
         City cityOfPecs = cityService.findByName("Pécs");
         City cityOfGyor = cityService.findByName("Győr");
-        City cityOfNyiregyhaza = cityService.findByName("Nyírergyháza");
+        City cityOfNyiregyhaza = cityService.findByName("Nyiregyhaza");
         citiesInHungary.remove(cityOfBudapest);
         citiesInHungary.remove(cityOfGyor);
         citiesInHungary.remove(cityOfPecs);

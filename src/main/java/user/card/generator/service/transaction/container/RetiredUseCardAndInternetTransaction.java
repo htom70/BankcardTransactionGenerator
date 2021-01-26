@@ -1,6 +1,8 @@
 package user.card.generator.service.transaction.container;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import user.card.generator.domain.ResponseCode;
 import user.card.generator.domain.city.City;
 import user.card.generator.domain.country.Country;
@@ -35,6 +37,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Service
 public class RetiredUseCardAndInternetTransaction {
 
     @Autowired
@@ -46,6 +49,16 @@ public class RetiredUseCardAndInternetTransaction {
     @Autowired
     CityService cityService;
 
+    @Autowired
+    AtmSelector atmSelector;
+
+    @Autowired
+    RetiredDailyVendorSelector retiredDailyVendorSelector;
+
+    @Autowired
+    RetiredSaturdayVendorSelector retiredSaturdayVendorSelector;
+
+    @Transactional
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
         Random random = new Random();
         Country country = countryService.findByCountryCode("HU");
@@ -80,15 +93,15 @@ public class RetiredUseCardAndInternetTransaction {
                             Transaction transaction = new Transaction(preTransaction.getCardNumber(), preTransaction.getTransactionType()
                                     , preTransaction.getTimestamp(), preTransaction.getAmount(), "HUF", ResponseCode.OK, "HU", preTransaction.getVendorCode());
                             transaction.setAllFields(cities);
-                            transactions.add(transaction);
+                            transaction.setFraud(false);
+                            transactionService.save(transaction);
+//                            transactions.add(transaction);
                         }
                     }
                 }
-
-                transactionService.saveAll(transactions);
             }
         }
-        transactionService.saveAll(transactions);
+//        transactionService.saveAll(transactions);
     }
 
     private void createDailyPosTransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {
@@ -102,8 +115,7 @@ public class RetiredUseCardAndInternetTransaction {
         for (LocalDate day : transactionDays) {
             int amount = 2000 + random.nextInt(8000);
             Timestamp timestamp = TimestampGenerator.generate(random, day);
-            VendorSelector vendorSelector = new RetiredDailyVendorSelector();
-            Vendor vendor = vendorSelector.selectVendor(person);
+            Vendor vendor = retiredDailyVendorSelector.selectVendor(person);
             PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.POS, timestamp, amount
                     , "HUF", ResponseCode.OK, "HU", vendor.getVendorCode());
             addItemToMap(pretransactionsMap, day, preTransaction);
@@ -117,8 +129,7 @@ public class RetiredUseCardAndInternetTransaction {
         for (LocalDate saturday : saturdays) {
             int amount = 10000 + random.nextInt(5000);
             Timestamp timestamp = TimestampGenerator.generate(random, saturday);
-            VendorSelector vendorSelector = new RetiredSaturdayVendorSelector();
-            Vendor vendor = vendorSelector.selectVendor(person);
+            Vendor vendor = retiredSaturdayVendorSelector.selectVendor(person);
             PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.POS, timestamp, amount
                     , "HUF", ResponseCode.OK, "HU", vendor.getVendorCode());
             addItemToMap(pretransactionsMap, saturday, preTransaction);
@@ -131,7 +142,8 @@ public class RetiredUseCardAndInternetTransaction {
             LocalDate day = daysInCurrentMonth.get(random.nextInt(daysInCurrentMonth.size()));
             int amount = 5000 + random.nextInt(5001);
             Timestamp timestamp = TimestampGenerator.generate(random, day);
-            AtmSelector atmSelector = new AtmSelector(100, 100);
+            atmSelector.setHomeRatePercent(100);
+            atmSelector.setPrivateBankPercent(100);
             ATM atm = atmSelector.selectAtm(person);
             PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.ATM, timestamp, amount
                     , "HUF", ResponseCode.OK, "HU", atm.getATMcode());
@@ -150,14 +162,14 @@ public class RetiredUseCardAndInternetTransaction {
         for (LocalDate day : normalTransactionDays) {
             int amount = 2000 + random.nextInt(8000);
             Timestamp timestamp = TimestampGenerator.generate(random, day);
-            VendorSelector vendorSelector = new RetiredDailyVendorSelector();
-            Vendor vendor = vendorSelector.selectVendor(person);
+            Vendor vendor = retiredDailyVendorSelector.selectVendor(person);
             PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.POS, timestamp, amount
                     , "HUF", ResponseCode.OK, "HU", vendor.getVendorCode());
             addItemToMap(pretransactionsMap, day, preTransaction);
         }
+        int lengthOfMonth = month.length(currentYear.getYear().isLeap());
         startDate = LocalDate.of(currentYear.getYear().getValue(), month.getValue(), 10);
-        endDate = LocalDate.of(currentYear.getYear().getValue(), month.getValue(), 31);
+        endDate = LocalDate.of(currentYear.getYear().getValue(), month.getValue(), lengthOfMonth);
         numOfDays = ChronoUnit.DAYS.between(startDate, endDate);
         List<LocalDate> transactionDaysInChristmasPeriod = Stream.iterate(startDate, date -> date.plusDays(1))
                 .limit(numOfDays)
@@ -165,8 +177,7 @@ public class RetiredUseCardAndInternetTransaction {
         for (LocalDate day : transactionDaysInChristmasPeriod) {
             int occasion = 2 + random.nextInt(4);
             for (int i = 0; i < occasion; i++) {
-                VendorSelector vendorSelector = new RetiredDailyVendorSelector();
-                Vendor vendor = vendorSelector.selectVendor(person);
+                Vendor vendor = retiredDailyVendorSelector.selectVendor(person);
                 int amount = 2000 + random.nextInt(8000);
                 Timestamp timestamp = TimestampGenerator.generate(random, day);
                 PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.POS, timestamp, amount

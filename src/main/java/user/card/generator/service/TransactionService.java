@@ -18,4 +18,12 @@ public class TransactionService {
     public void saveAll(List<Transaction> transactions) {
         transactionRepository.saveAll(transactions);
     }
+
+    public List<Transaction> findAll() {
+        return transactionRepository.findAll();
+    }
+
+    public void save(Transaction transaction) {
+        transactionRepository.save(transaction);
+    }
 }

@@ -1,57 +1,74 @@
 package user.card.generator.service.transaction.vendorandatm;
 
+import lombok.Data;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import user.card.generator.domain.city.City;
 import user.card.generator.domain.person.Person;
 import user.card.generator.domain.vendor.ATM;
 import user.card.generator.service.ATMservice;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@Setter
+@Service
 public class AtmSelector {
 
     @Autowired
     ATMservice atMservice;
 
+    private Person storedPerson;
     private int homeRatePercent;
     private int privateBankPercent;
-    private List<ATM> atmsNotInCity = new ArrayList<>();
-    private List<ATM> atmsInHomeCity = new ArrayList<>();
-    private Random random;
+    private List<ATM> atms = new ArrayList<>();
+    List<ATM> selectedAtmsInHomeCityUponPrivateBank = new ArrayList<>();
+    List<ATM> selectedAtmsInForeignCitiesUponPrivateBank = new ArrayList<>();
+    List<ATM> selectedAtmsInHomeCityUponForeignBank = new ArrayList<>();
+    List<ATM> selectedAtmsInForeignCityUponForeignBank = new ArrayList<>();
 
-    public AtmSelector(int homeRatePercent, int privateBankPercent) {
-        this.homeRatePercent = homeRatePercent;
-        this.privateBankPercent = privateBankPercent;
-        random = new Random();
-    }
+    private Random random = new Random();
+
 
     public ATM selectAtm(Person person) {
-        List<ATM> atms = new ArrayList<>();
-        List<ATM> selectedAtms;
-        if (atmsInHomeCity.isEmpty()) {
-            atmsInHomeCity = atMservice.findAllByCity(person.getCity());
+        ATM result;
+        List<ATM> atmsInHomeCity = new ArrayList<>();
+        List<ATM> atmsInForeignCities = new ArrayList<>();
+        if (atms.isEmpty()) {
+            atms = atMservice.findAll();
         }
-        if (atmsNotInCity.isEmpty()) {
-            atmsNotInCity = atMservice.findAllByCityIsNot(person.getCity());
-        }
-        int numberForSelectAtmInHomeCity = random.nextInt(100);
-        if (numberForSelectAtmInHomeCity < homeRatePercent) {
-            atms.addAll(atmsInHomeCity);
-        } else {
-            atms.addAll(atmsNotInCity);
-        }
-        int numberForSelectAtmUponPrivateBank = random.nextInt(100);
-        if (numberForSelectAtmUponPrivateBank < privateBankPercent) {
-            selectedAtms = atms.stream()
+        if (!person.equals(storedPerson)) {
+            storedPerson = person;
+            atmsInForeignCities.addAll(atms);
+            atmsInHomeCity = atms.parallelStream()
+                    .filter(atm -> atm.getCity().equals(person.getCity()))
+                    .collect(Collectors.toList());
+            atmsInForeignCities.removeAll(atmsInHomeCity);
+            selectedAtmsInHomeCityUponPrivateBank = atmsInHomeCity.parallelStream()
                     .filter(atm -> atm.getBank().equals(person.getBank()))
                     .collect(Collectors.toList());
-        } else {
-            selectedAtms = atms.stream()
-                    .filter(atm -> !atm.getBank().equals(person.getBank()))
+            selectedAtmsInForeignCitiesUponPrivateBank = atmsInForeignCities.parallelStream()
+                    .filter(atm -> atm.getBank().equals(person.getBank()))
                     .collect(Collectors.toList());
+            selectedAtmsInHomeCityUponForeignBank.addAll(atmsInHomeCity);
+            selectedAtmsInHomeCityUponForeignBank.removeAll(selectedAtmsInHomeCityUponPrivateBank);
+            selectedAtmsInForeignCityUponForeignBank.addAll(atmsInForeignCities);
+            selectedAtmsInForeignCityUponForeignBank.removeAll(selectedAtmsInForeignCitiesUponPrivateBank);
+            System.out.println("listák aktualizálva");
         }
-        return selectedAtms.get(random.nextInt(selectedAtms.size()));
+        int numberForSelectAtmInHomeCity = random.nextInt(100);
+        int numberForSelectAtmUponPrivateBank = random.nextInt(100);
+
+        if (numberForSelectAtmInHomeCity < homeRatePercent && numberForSelectAtmUponPrivateBank < privateBankPercent) {
+            result = selectedAtmsInHomeCityUponPrivateBank.get(random.nextInt(selectedAtmsInHomeCityUponPrivateBank.size()));
+        } else if (numberForSelectAtmInHomeCity < homeRatePercent && numberForSelectAtmUponPrivateBank >= privateBankPercent) {
+            result = selectedAtmsInHomeCityUponForeignBank.get(random.nextInt(selectedAtmsInHomeCityUponForeignBank.size()));
+        } else if (numberForSelectAtmInHomeCity > homeRatePercent && numberForSelectAtmUponPrivateBank < privateBankPercent) {
+            result = selectedAtmsInForeignCitiesUponPrivateBank.get(random.nextInt(selectedAtmsInForeignCitiesUponPrivateBank.size()));
+        } else {
+            result = selectedAtmsInForeignCityUponForeignBank.get(random.nextInt(selectedAtmsInForeignCityUponForeignBank.size()));
+        }
+        return result;
     }
 }
