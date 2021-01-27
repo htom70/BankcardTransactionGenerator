@@ -49,27 +49,26 @@ public class OrdinaryUseCardDontUseInternetTransaction {
         List<Transaction> transactions = new ArrayList<>();
 
         for (Person person : people) {
-            for (int i = 1; i <= 12; i++) {
+            int limit = 400000;
+            Map<Integer, List<LocalDate>> monthsAndDays = currentYear.getMonthsAndDaysInMonth(currentYear.getDays());
+            for (Map.Entry<Integer, List<LocalDate>> item : monthsAndDays.entrySet()) {
                 Map<LocalDate, List<PreTransaction>> pretransactionsMap = new HashMap<>();
-                int limit = 400000;
-                Map<Integer, List<LocalDate>> monthsAndDays = currentYear.getMonthsAndDaysInMonth(currentYear.getDays());
-                for (Map.Entry<Integer, List<LocalDate>> item : monthsAndDays.entrySet()) {
-                    Month month = Month.of(item.getKey());
-                    List<LocalDate> daysInCurrentMonth = item.getValue();
-                    if (i == 1) {
-                        createYearlyPosTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
-                    }
-                    createIntraDailyPosTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
-                    createMonthlyAtmTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
-                    if (i == 12) {
-                        createMonthlyNetTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
-                    }
+                Month month = Month.of(item.getKey());
+                List<LocalDate> daysInCurrentMonth = item.getValue();
+                if (month.equals(Month.JANUARY)) {
+                    createYearlyPosTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
+                }
+                createIntraDailyPosTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
+                createMonthlyAtmTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
+                if (month.equals(Month.DECEMBER)) {
+                    createMonthlyNetTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
                 }
                 int sum = 0;
-                while (sum < limit) {
-                    for (Map.Entry<LocalDate, List<PreTransaction>> item : pretransactionsMap.entrySet()) {
-                        for (PreTransaction preTransaction : item.getValue()) {
-                            sum += preTransaction.getAmount();
+                for (List<PreTransaction> preTransactions : pretransactionsMap.values()) {
+                    for (int i = 0; i < preTransactions.size() && (sum < limit); i++) {
+                        PreTransaction preTransaction = preTransactions.get(i);
+                        sum += preTransaction.getAmount();
+                        if (sum < limit) {
                             Transaction transaction = new Transaction(preTransaction.getCardNumber(), preTransaction.getTransactionType()
                                     , preTransaction.getTimestamp(), preTransaction.getAmount(), "HUF", ResponseCode.OK, "HU", preTransaction.getVendorCode());
                             transaction.setAllFields(cities);

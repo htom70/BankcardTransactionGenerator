@@ -49,25 +49,25 @@ public class OrdinaryUserDontUseCardTransaction {
         List<Transaction> transactions = new ArrayList<>();
 
         for (Person person : people) {
-            for (int i = 1; i <= 12; i++) {
+            int limit = 400000;
+            Map<Integer, List<LocalDate>> monthsAndDays = currentYear.getMonthsAndDaysInMonth(currentYear.getDays());
+            for (Map.Entry<Integer, List<LocalDate>> item : monthsAndDays.entrySet()) {
                 Map<LocalDate, List<PreTransaction>> pretransactionsMap = new HashMap<>();
-                int limit = 400000;
-                Map<Integer, List<LocalDate>> monthsAndDays = currentYear.getMonthsAndDaysInMonth(currentYear.getDays());
-                for (Map.Entry<Integer, List<LocalDate>> item : monthsAndDays.entrySet()) {
-                    Month month = Month.of(item.getKey());
-                    List<LocalDate> daysInCurrentMonth = item.getValue();
-                    if (i == 1) {
-                        createYearlyPosTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
-                    }
-                    createMothlyPosTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
-                    createMonthlyAtmTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
-
+                Month month = Month.of(item.getKey());
+                List<LocalDate> daysInCurrentMonth = item.getValue();
+                if (month.equals(Month.DECEMBER)) {
+                    createYearlyPosTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
                 }
+                createMothlyPosTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
+                createMonthlyAtmTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
                 int sum = 0;
-                while (sum < limit) {
-                    for (Map.Entry<LocalDate, List<PreTransaction>> item : pretransactionsMap.entrySet()) {
-                        for (PreTransaction preTransaction : item.getValue()) {
-                            sum += preTransaction.getAmount();
+                for (List<PreTransaction> preTransactions : pretransactionsMap.values()) {
+                    for (int i = 0; i < preTransactions.size() && (sum < limit); i++) {
+                        PreTransaction preTransaction = preTransactions.get(i);
+                        sum += preTransaction.getAmount();
+                        System.out.println("sum: " + sum);
+                        System.out.println("i: " + i);
+                        if (sum < limit) {
                             Transaction transaction = new Transaction(preTransaction.getCardNumber(), preTransaction.getTransactionType()
                                     , preTransaction.getTimestamp(), preTransaction.getAmount(), "HUF", ResponseCode.OK, "HU", preTransaction.getVendorCode());
                             transaction.setAllFields(cities);
@@ -82,7 +82,7 @@ public class OrdinaryUserDontUseCardTransaction {
     }
 
     private void createMothlyPosTransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {
-        int occasions = 2+random.nextInt(4);
+        int occasions = 2 + random.nextInt(4);
         for (int i = 0; i < occasions; i++) {
             LocalDate day = daysInCurrentMonth.get(random.nextInt(daysInCurrentMonth.size()));
             int amount = 2000 + random.nextInt(8001);
@@ -97,7 +97,7 @@ public class OrdinaryUserDontUseCardTransaction {
     }
 
     private void createMonthlyAtmTransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {
-        int occasions = 2+random.nextInt(1);
+        int occasions = 2 + random.nextInt(1);
         for (int i = 0; i < occasions; i++) {
             LocalDate day = daysInCurrentMonth.get(random.nextInt(daysInCurrentMonth.size()));
             int amount = 100000 + random.nextInt(200001);

@@ -74,7 +74,7 @@ public class ATMservice {
         citiesInHungary.remove(cityOfSzeged);
         citiesInHungary.remove(cityOfNyiregyhaza);
         List<Bank> banksInHungary = bankService.findAllByCountry(countryHungary);
-        int numOfToBeGeneratedATM = (10 + 6 * 5 + citiesInHungary.size()) * banksInHungary.size();
+        int numOfToBeGeneratedATM = (100 + 6 * 5 + citiesInHungary.size()) * banksInHungary.size();
         NumberStringGenerator numberStringGenerator = new NumberStringGenerator();
         List<String> atmCodes = numberStringGenerator.generateDifferentCodeStrings(5, numOfToBeGeneratedATM);
         ListIterator<String> atmCodeIterator = atmCodes.listIterator();

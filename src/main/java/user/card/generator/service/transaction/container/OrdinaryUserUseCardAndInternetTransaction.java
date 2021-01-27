@@ -52,22 +52,26 @@ public class OrdinaryUserUseCardAndInternetTransaction {
         List<City> cities = cityService.findAllByCountry(country);
         List<Transaction> transactions = new ArrayList<>();
         for (Person person : people) {
-            for (int i = 1; i <= 12; i++) {
+            int limit = 400000;
+            Map<Integer, List<LocalDate>> monthsAndDays = currentYear.getMonthsAndDaysInMonth(currentYear.getDays());
+            for (Map.Entry<Integer, List<LocalDate>> item : monthsAndDays.entrySet()) {
                 Map<LocalDate, List<PreTransaction>> pretransactionsMap = new HashMap<>();
-                int limit = 400000;
-                Map<Integer, List<LocalDate>> monthsAndDays = currentYear.getMonthsAndDaysInMonth(currentYear.getDays());
-                for (Map.Entry<Integer, List<LocalDate>> item : monthsAndDays.entrySet()) {
-                    Month month = Month.of(item.getKey());
-                    List<LocalDate> daysInCurrentMonth = item.getValue();
-                    createDailyPosTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
-                    createMonthlyAtmTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
-                    createMonthlyNetTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
-                }
+                Month month = Month.of(item.getKey());
+                List<LocalDate> daysInCurrentMonth = item.getValue();
+                createDailyPosTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
+                createMonthlyAtmTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
+                createMonthlyNetTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
+
                 int sum = 0;
-                while (sum < limit) {
-                    for (Map.Entry<LocalDate, List<PreTransaction>> item : pretransactionsMap.entrySet()) {
-                        for (PreTransaction preTransaction : item.getValue()) {
-                            sum += preTransaction.getAmount();
+                for (List<PreTransaction> preTransactions : pretransactionsMap.values()) {
+                    System.out.println("preTransaction lista hossza: " + preTransactions.size());
+
+                    for (int i = 0; i < preTransactions.size() && (sum < limit); i++) {
+                        PreTransaction preTransaction = preTransactions.get(i);
+                        sum += preTransaction.getAmount();
+                        System.out.println("sum: " + sum);
+                        System.out.println("i: " + i);
+                        if (sum < limit) {
                             Transaction transaction = new Transaction(preTransaction.getCardNumber(), preTransaction.getTransactionType()
                                     , preTransaction.getTimestamp(), preTransaction.getAmount(), "HUF", ResponseCode.OK, "HU", preTransaction.getVendorCode());
                             transaction.setAllFields(cities);
@@ -92,7 +96,7 @@ public class OrdinaryUserUseCardAndInternetTransaction {
         for (LocalDate day : transactionDays) {
             int occasion = 1 + random.nextInt(4);
             for (int i = 0; i < occasion; i++) {
-                int amount = 2000 + random.nextInt(15000);
+                int amount = 2000 + random.nextInt(15001);
                 Timestamp timestamp = TimestampGenerator.generate(random, day);
                 VendorSelector vendorSelector = new OrdinaryVendorSelector(95);
                 Vendor vendor = vendorSelector.selectVendor(person);
