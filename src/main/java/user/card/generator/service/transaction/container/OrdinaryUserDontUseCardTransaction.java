@@ -41,6 +41,9 @@ public class OrdinaryUserDontUseCardTransaction {
     @Autowired
     AtmSelector atmSelector;
 
+    @Autowired
+    OrdinaryVendorSelector ordinaryVendorSelector;
+
     @Transactional
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
         Random random = new Random();
@@ -53,16 +56,18 @@ public class OrdinaryUserDontUseCardTransaction {
             Map<Integer, List<LocalDate>> monthsAndDays = currentYear.getMonthsAndDaysInMonth(currentYear.getDays());
             for (Map.Entry<Integer, List<LocalDate>> item : monthsAndDays.entrySet()) {
                 Map<LocalDate, List<PreTransaction>> pretransactionsMap = new HashMap<>();
+                Map<LocalDate, List<PreTransaction>> yearlyPretransactionsMap = new HashMap<>();
                 Month month = Month.of(item.getKey());
                 List<LocalDate> daysInCurrentMonth = item.getValue();
-                if (month.equals(Month.DECEMBER)) {
-                    createYearlyPosTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
+                if (month.equals(Month.JANUARY)) {
+                    createYearlyPosTransaction(yearlyPretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
                 }
                 createMothlyPosTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
                 createMonthlyAtmTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
                 int sum = 0;
                 for (List<PreTransaction> preTransactions : pretransactionsMap.values()) {
                     for (int i = 0; i < preTransactions.size() && (sum < limit); i++) {
+                        sum = calculateSumAmontUponYearlyTransactionAndCurrentMonht(month, yearlyPretransactionsMap);
                         PreTransaction preTransaction = preTransactions.get(i);
                         sum += preTransaction.getAmount();
                         System.out.println("sum: " + sum);
@@ -87,8 +92,7 @@ public class OrdinaryUserDontUseCardTransaction {
             LocalDate day = daysInCurrentMonth.get(random.nextInt(daysInCurrentMonth.size()));
             int amount = 2000 + random.nextInt(8001);
             Timestamp timestamp = TimestampGenerator.generate(random, day);
-            VendorSelector vendorSelector = new OrdinaryVendorSelector(95);
-            Vendor vendor = vendorSelector.selectVendor(person);
+            Vendor vendor = ordinaryVendorSelector.selectVendor(person);
             PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.POS, timestamp, amount
                     , "HUF", ResponseCode.OK, "HU", vendor.getVendorCode());
             addItemToMap(pretransactionsMap, day, preTransaction);
@@ -117,12 +121,23 @@ public class OrdinaryUserDontUseCardTransaction {
             LocalDate day = currentYear.getDays().get(random.nextInt(currentYear.getDays().size()));
             int amount = 100000 + random.nextInt(300001);
             Timestamp timestamp = TimestampGenerator.generate(random, day);
-            VendorSelector vendorSelector = new OrdinaryVendorSelector(95);
-            Vendor vendor = vendorSelector.selectVendor(person);
+            Vendor vendor = ordinaryVendorSelector.selectVendor(person);
             PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.POS, timestamp, amount
                     , "HUF", ResponseCode.OK, "HU", vendor.getVendorCode());
             addItemToMap(pretransactionsMap, day, preTransaction);
         }
+    }
+
+    private int calculateSumAmontUponYearlyTransactionAndCurrentMonht(Month month, Map<LocalDate, List<PreTransaction>> yearlyPretransactionsMap) {
+        int sum = 0;
+        for (Map.Entry<LocalDate, List<PreTransaction>> item : yearlyPretransactionsMap.entrySet()) {
+            if (month.equals(item.getKey().getMonth())) {
+                List<PreTransaction> preTransactions = item.getValue();
+                for(PreTransaction preTransaction:preTransactions)
+                    sum += preTransaction.getAmount();
+            }
+        }
+        return sum;
     }
 
     public void addItemToMap(Map<LocalDate, List<PreTransaction>> preTransactions, LocalDate date, PreTransaction preTransaction) {

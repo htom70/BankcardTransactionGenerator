@@ -17,18 +17,13 @@ import user.card.generator.service.CountryService;
 import user.card.generator.service.TransactionService;
 import user.card.generator.service.transaction.vendorandatm.AtmSelector;
 import user.card.generator.service.transaction.vendorselector.OrdinaryVendorSelector;
-import user.card.generator.service.transaction.vendorselector.RetiredDailyVendorSelector;
-import user.card.generator.service.transaction.vendorselector.VendorSelector;
 import user.card.generator.time.CurrentYear;
 import user.card.generator.time.TimestampGenerator;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class VipUserTransaction {
@@ -45,6 +40,9 @@ public class VipUserTransaction {
     @Autowired
     AtmSelector atmSelector;
 
+    @Autowired
+    OrdinaryVendorSelector ordinaryVendorSelector;
+
     @Transactional
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
         Random random = new Random();
@@ -52,24 +50,24 @@ public class VipUserTransaction {
         List<City> cities = cityService.findAllByCountry(country);
         List<Transaction> transactions = new ArrayList<>();
         for (Person person : people) {
-            for (int i = 1; i <= 12; i++) {
+            int limit = 3000000;
+            Map<Integer, List<LocalDate>> monthsAndDays = currentYear.getMonthsAndDaysInMonth(currentYear.getDays());
+            for (Map.Entry<Integer, List<LocalDate>> item : monthsAndDays.entrySet()) {
                 Map<LocalDate, List<PreTransaction>> pretransactionsMap = new HashMap<>();
-                int limit = 0;
-//                int ordinalDayNumber = 10 + random.nextInt(4);
-                Map<Integer, List<LocalDate>> monthsAndDays = currentYear.getMonthsAndDaysInMonth(currentYear.getDays());
-                for (Map.Entry<Integer, List<LocalDate>> item : monthsAndDays.entrySet()) {
-                    Month month = Month.of(item.getKey());
-                    List<LocalDate> daysInCurrentMonth = item.getValue();
-                    createMonthlyAtmTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
-                    createMonthlyNetTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
-                    createIntraDailyPostransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
-                }
+                Month month = Month.of(item.getKey());
+                List<LocalDate> daysInCurrentMonth = item.getValue();
+                createMonthlyAtmTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
+                createMonthlyNetTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
+                createIntraDailyPostransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
 
                 int sum = 0;
-                while (sum < limit) {
-                    for (Map.Entry<LocalDate, List<PreTransaction>> item : pretransactionsMap.entrySet()) {
-                        for (PreTransaction preTransaction : item.getValue()) {
-                            sum += preTransaction.getAmount();
+                for (List<PreTransaction> preTransactions : pretransactionsMap.values()) {
+                    for (int i = 0; i < preTransactions.size() && (sum < limit); i++) {
+                        PreTransaction preTransaction = preTransactions.get(i);
+                        sum += preTransaction.getAmount();
+                        System.out.println("sum: " + sum);
+                        System.out.println("i: " + i);
+                        if (sum < limit) {
                             Transaction transaction = new Transaction(preTransaction.getCardNumber(), preTransaction.getTransactionType()
                                     , preTransaction.getTimestamp(), preTransaction.getAmount(), "HUF", ResponseCode.OK, "HU", preTransaction.getVendorCode());
                             transaction.setAllFields(cities);
@@ -79,12 +77,13 @@ public class VipUserTransaction {
                     }
                 }
             }
+
         }
         transactionService.saveAll(transactions);
     }
 
     private void createMonthlyAtmTransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {
-        int occasions =random.nextInt(6);
+        int occasions = random.nextInt(6);
         for (int i = 0; i < occasions; i++) {
             LocalDate day = daysInCurrentMonth.get(random.nextInt(daysInCurrentMonth.size()));
             int amount = 50000 + random.nextInt(150001);
@@ -105,8 +104,7 @@ public class VipUserTransaction {
             int amount = 50000 + random.nextInt(150001);
             for (LocalDate day : daysInCurrentMonth) {
                 Timestamp timestamp = TimestampGenerator.generate(random, day);
-                VendorSelector vendorSelector = new OrdinaryVendorSelector(90);
-                Vendor vendor = vendorSelector.selectVendor(person);
+                Vendor vendor = ordinaryVendorSelector.selectVendor(person);
                 PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.NET, timestamp, amount
                         , "HUF", ResponseCode.OK, "HU", vendor.getVendorCode());
                 addItemToMap(pretransactionsMap, day, preTransaction);
@@ -116,8 +114,7 @@ public class VipUserTransaction {
             int amount = 50000 + random.nextInt(450001);
             for (LocalDate day : daysInCurrentMonth) {
                 Timestamp timestamp = TimestampGenerator.generate(random, day);
-                VendorSelector vendorSelector = new OrdinaryVendorSelector(90);
-                Vendor vendor = vendorSelector.selectVendor(person);
+                Vendor vendor = ordinaryVendorSelector.selectVendor(person);
                 PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.NET, timestamp, amount
                         , "HUF", ResponseCode.OK, "HU", vendor.getVendorCode());
                 addItemToMap(pretransactionsMap, day, preTransaction);
@@ -129,11 +126,10 @@ public class VipUserTransaction {
     private void createIntraDailyPostransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {
         for (LocalDate day : daysInCurrentMonth) {
             int occasion = 2 + random.nextInt(9);
-            for (int i = 0; i <occasion; i++) {
+            for (int i = 0; i < occasion; i++) {
                 int amount = 10000 + random.nextInt(140001);
                 Timestamp timestamp = TimestampGenerator.generate(random, day);
-                VendorSelector vendorSelector = new OrdinaryVendorSelector(90);
-                Vendor vendor = vendorSelector.selectVendor(person);
+                Vendor vendor = ordinaryVendorSelector.selectVendor(person);
                 PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.POS, timestamp, amount
                         , "HUF", ResponseCode.OK, "HU", vendor.getVendorCode());
                 addItemToMap(pretransactionsMap, day, preTransaction);

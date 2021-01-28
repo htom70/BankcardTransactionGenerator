@@ -36,6 +36,9 @@ public class TransactionContainer {
     OrdinaryUserDontUseCardTransaction ordinaryUserDontUseCardTransaction;
 
     @Autowired
+    VipUserTransaction vipUserTransaction;
+
+    @Autowired
     CityService cityService;
 
     @Autowired
@@ -54,6 +57,8 @@ public class TransactionContainer {
         ordinaryUseCardDontUseInternetTransaction.processTransaction(ordinaryUserUseCardDontUseInternetPeople,currentYear);
         List<Person> ordinaryUserDontUseCardAndInternetPeople = personService.findPeopleUponCategory(PersonCategory.ORDINARYUSER_USE_CARD_AND_INTERNET);
         ordinaryUserDontUseCardTransaction.processTransaction(ordinaryUserDontUseCardAndInternetPeople,currentYear);
+        List<Person> vipPeople = personService.findPeopleUponCategory(PersonCategory.VIP_USER);
+        vipUserTransaction.processTransaction(vipPeople, currentYear);
 
 
         //        List<Person> testUsers = new ArrayList<>();

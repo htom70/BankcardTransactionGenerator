@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import user.card.generator.domain.BankInHungary;
-import user.card.generator.domain.ProductCategory;
 import user.card.generator.domain.ResponseCode;
 import user.card.generator.domain.city.City;
 import user.card.generator.domain.field.FieldGenerator;

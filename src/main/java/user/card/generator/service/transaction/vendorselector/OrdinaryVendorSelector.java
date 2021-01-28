@@ -1,6 +1,7 @@
 package user.card.generator.service.transaction.vendorselector;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import user.card.generator.domain.city.City;
 import user.card.generator.domain.person.Person;
 import user.card.generator.domain.vendor.ATM;
@@ -10,6 +11,7 @@ import user.card.generator.service.VendorService;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class OrdinaryVendorSelector implements VendorSelector {
 
     @Autowired
@@ -22,10 +24,6 @@ public class OrdinaryVendorSelector implements VendorSelector {
     Map<City, List<Vendor>> vendorsInHomeCityStoredByCity = new HashMap<>();
     private List<Vendor> vendorsInForeignCity = new ArrayList<>();
     Map<City, List<Vendor>> vendorsInForeignCityStoredByCity = new HashMap<>();
-
-    public OrdinaryVendorSelector(int homeRatePercent) {
-        this.homeRatePercent = homeRatePercent;
-    }
 
     @Override
     public Vendor selectVendor(Person person) {

@@ -17,7 +17,6 @@ import user.card.generator.service.CountryService;
 import user.card.generator.service.TransactionService;
 import user.card.generator.service.transaction.vendorandatm.AtmSelector;
 import user.card.generator.service.transaction.vendorselector.OrdinaryVendorSelector;
-import user.card.generator.service.transaction.vendorselector.VendorSelector;
 import user.card.generator.time.CurrentYear;
 import user.card.generator.time.TimestampGenerator;
 
@@ -41,6 +40,9 @@ public class OrdinaryUseCardDontUseInternetTransaction {
     @Autowired
     AtmSelector atmSelector;
 
+    @Autowired
+    OrdinaryVendorSelector ordinaryVendorSelector;
+
     @Transactional
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
         Random random = new Random();
@@ -53,10 +55,11 @@ public class OrdinaryUseCardDontUseInternetTransaction {
             Map<Integer, List<LocalDate>> monthsAndDays = currentYear.getMonthsAndDaysInMonth(currentYear.getDays());
             for (Map.Entry<Integer, List<LocalDate>> item : monthsAndDays.entrySet()) {
                 Map<LocalDate, List<PreTransaction>> pretransactionsMap = new HashMap<>();
+                Map<LocalDate, List<PreTransaction>> yearlyPretransactionsMap = new HashMap<>();
                 Month month = Month.of(item.getKey());
                 List<LocalDate> daysInCurrentMonth = item.getValue();
                 if (month.equals(Month.JANUARY)) {
-                    createYearlyPosTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
+                    createYearlyPosTransaction(yearlyPretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
                 }
                 createIntraDailyPosTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
                 createMonthlyAtmTransaction(pretransactionsMap, person, currentYear, month, daysInCurrentMonth, random);
@@ -66,6 +69,7 @@ public class OrdinaryUseCardDontUseInternetTransaction {
                 int sum = 0;
                 for (List<PreTransaction> preTransactions : pretransactionsMap.values()) {
                     for (int i = 0; i < preTransactions.size() && (sum < limit); i++) {
+                        sum = calculateSumAmontUponYearlyTransactionAndCurrentMonht(month, yearlyPretransactionsMap);
                         PreTransaction preTransaction = preTransactions.get(i);
                         sum += preTransaction.getAmount();
                         if (sum < limit) {
@@ -88,12 +92,23 @@ public class OrdinaryUseCardDontUseInternetTransaction {
             LocalDate day = currentYear.getDays().get(random.nextInt(currentYear.getDays().size()));
             int amount = 100000 + random.nextInt(300001);
             Timestamp timestamp = TimestampGenerator.generate(random, day);
-            VendorSelector vendorSelector = new OrdinaryVendorSelector(95);
-            Vendor vendor = vendorSelector.selectVendor(person);
+            Vendor vendor = ordinaryVendorSelector.selectVendor(person);
             PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.POS, timestamp, amount
                     , "HUF", ResponseCode.OK, "HU", vendor.getVendorCode());
             addItemToMap(pretransactionsMap, day, preTransaction);
         }
+    }
+
+    private int calculateSumAmontUponYearlyTransactionAndCurrentMonht(Month month, Map<LocalDate, List<PreTransaction>> yearlyPretransactionsMap) {
+        int sum = 0;
+        for (Map.Entry<LocalDate, List<PreTransaction>> item : yearlyPretransactionsMap.entrySet()) {
+            if (month.equals(item.getKey().getMonth())) {
+                List<PreTransaction> preTransactions = item.getValue();
+                for(PreTransaction preTransaction:preTransactions)
+                    sum += preTransaction.getAmount();
+            }
+        }
+        return sum;
     }
 
     private void createIntraDailyPosTransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {
@@ -102,8 +117,7 @@ public class OrdinaryUseCardDontUseInternetTransaction {
             for (int i = 0; i < occasion; i++) {
                 int amount = 1000 + random.nextInt(24001);
                 Timestamp timestamp = TimestampGenerator.generate(random, day);
-                VendorSelector vendorSelector = new OrdinaryVendorSelector(95);
-                Vendor vendor = vendorSelector.selectVendor(person);
+                Vendor vendor = ordinaryVendorSelector.selectVendor(person);
                 PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.POS, timestamp, amount
                         , "HUF", ResponseCode.OK, "HU", vendor.getVendorCode());
                 addItemToMap(pretransactionsMap, day, preTransaction);
@@ -132,8 +146,7 @@ public class OrdinaryUseCardDontUseInternetTransaction {
             LocalDate day = daysInCurrentMonth.get(random.nextInt(daysInCurrentMonth.size()));
             int amount = 2000 + random.nextInt(38001);
             Timestamp timestamp = TimestampGenerator.generate(random, day);
-            VendorSelector vendorSelector = new OrdinaryVendorSelector(95);
-            Vendor vendor = vendorSelector.selectVendor(person);
+            Vendor vendor = ordinaryVendorSelector.selectVendor(person);
             PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.NET, timestamp, amount
                     , "HUF", ResponseCode.OK, "HU", vendor.getVendorCode());
             addItemToMap(pretransactionsMap, day, preTransaction);

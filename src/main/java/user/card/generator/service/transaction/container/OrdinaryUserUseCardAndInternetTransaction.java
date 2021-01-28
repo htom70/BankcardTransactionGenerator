@@ -45,6 +45,9 @@ public class OrdinaryUserUseCardAndInternetTransaction {
     @Autowired
     AtmSelector atmSelector;
 
+    @Autowired
+    OrdinaryVendorSelector ordinaryVendorSelector;
+
     @Transactional
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
         Random random = new Random();
@@ -98,8 +101,7 @@ public class OrdinaryUserUseCardAndInternetTransaction {
             for (int i = 0; i < occasion; i++) {
                 int amount = 2000 + random.nextInt(15001);
                 Timestamp timestamp = TimestampGenerator.generate(random, day);
-                VendorSelector vendorSelector = new OrdinaryVendorSelector(95);
-                Vendor vendor = vendorSelector.selectVendor(person);
+                Vendor vendor = ordinaryVendorSelector.selectVendor(person);
                 PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.POS, timestamp, amount
                         , "HUF", ResponseCode.OK, "HU", vendor.getVendorCode());
                 addItemToMap(pretransactionsMap, day, preTransaction);
@@ -128,8 +130,7 @@ public class OrdinaryUserUseCardAndInternetTransaction {
             LocalDate day = daysInCurrentMonth.get(random.nextInt(daysInCurrentMonth.size()));
             int amount = 5000 + random.nextInt(15001);
             Timestamp timestamp = TimestampGenerator.generate(random, day);
-            VendorSelector vendorSelector = new OrdinaryVendorSelector(95);
-            Vendor vendor = vendorSelector.selectVendor(person);
+            Vendor vendor = ordinaryVendorSelector.selectVendor(person);
             PreTransaction preTransaction = new PreTransaction(person.getCardNumber(), TransactionType.NET, timestamp, amount
                     , "HUF", ResponseCode.OK, "HU", vendor.getVendorCode());
             addItemToMap(pretransactionsMap, day, preTransaction);
