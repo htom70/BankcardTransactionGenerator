@@ -21,6 +21,8 @@ import user.card.generator.time.CurrentYear;
 import user.card.generator.time.TimestampGenerator;
 
 import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
@@ -49,6 +51,7 @@ public class VipUserTransaction {
         Country country = countryService.findByCountryCode("HU");
         List<City> cities = cityService.findAllByCountry(country);
         List<Transaction> transactions = new ArrayList<>();
+        Instant start = Instant.now();
         for (Person person : people) {
             int limit = 3000000;
             Map<Integer, List<LocalDate>> monthsAndDays = currentYear.getMonthsAndDaysInMonth(currentYear.getDays());
@@ -80,6 +83,10 @@ public class VipUserTransaction {
 
         }
         transactionService.saveAll(transactions);
+        Instant end = Instant.now();
+        long elapsedTime = Duration.between(start, end).toMillis() / 1000;
+        System.out.println("Kártyát használó nyugdíjas személyek generált tranzakcióinak száma: " + transactions.size());
+        System.out.println("Genrálás időszükséglete: " + elapsedTime + "másodperc");
     }
 
     private void createMonthlyAtmTransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {

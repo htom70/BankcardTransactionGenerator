@@ -36,6 +36,8 @@ public class RetiredDontUseCardTransaction {
         List<Transaction> transactions = new ArrayList<>();
         atmSelector.setHomeRatePercent(100);
         atmSelector.setPrivateBankPercent(100);
+        Instant start = Instant.now();
+
         int num = 1;
         for (Person person : people) {
             for (int i = 1; i <= 12; i++) {
@@ -43,24 +45,23 @@ public class RetiredDontUseCardTransaction {
                 LocalDate date = LocalDate.of(currentYear.getYear().getValue(), i, ordinalDayNumber);
                 int amount = person.getIncome();
                 Timestamp timestamp = TimestampGenerator.generate(random, date);
-                Instant start = Instant.now();
                 ATM atm = atmSelector.selectAtm(person);
                 Instant step1 = Instant.now();
-                System.out.println("t: "+Duration.between(start,step1).toMillis());
+                System.out.println("t: " + Duration.between(start, step1).toMillis());
                 Transaction transaction = new Transaction(person.getCardNumber(), TransactionType.ATM, timestamp, amount, "HUF", ResponseCode.OK, "HU", atm.getATMcode());
                 Instant step2 = Instant.now();
                 transaction.setAllFields(cities);
-                Instant end = Instant.now();
-                long elepsedTime = Duration.between(step2, end).toMillis();
-                System.out.println("Setfield futási ideje: " + elepsedTime);
                 transaction.setFraud(false);
-                System.out.println("Tranzakció száma: "+num);
                 num++;
 //                transactionService.save(transaction);
                 transactions.add(transaction);
             }
         }
         transactionService.saveAll(transactions);
+        Instant end = Instant.now();
+        long elapsedTime = Duration.between(start, end).toMillis() / 1000;
+        System.out.println("Kártyát nem használó nyugdíjas személyek generált tranzakcióinak száma: " + transactions.size());
+        System.out.println("Genrálás időszükséglete: " + elapsedTime + "másodperc");
     }
 }
 

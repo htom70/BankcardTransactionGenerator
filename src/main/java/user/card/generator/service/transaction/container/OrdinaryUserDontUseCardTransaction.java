@@ -22,6 +22,8 @@ import user.card.generator.time.CurrentYear;
 import user.card.generator.time.TimestampGenerator;
 
 import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
@@ -50,7 +52,7 @@ public class OrdinaryUserDontUseCardTransaction {
         Country country = countryService.findByCountryCode("HU");
         List<City> cities = cityService.findAllByCountry(country);
         List<Transaction> transactions = new ArrayList<>();
-
+        Instant start = Instant.now();
         for (Person person : people) {
             int limit = 400000;
             Map<Integer, List<LocalDate>> monthsAndDays = currentYear.getMonthsAndDaysInMonth(currentYear.getDays());
@@ -84,6 +86,10 @@ public class OrdinaryUserDontUseCardTransaction {
             }
         }
         transactionService.saveAll(transactions);
+        System.out.println("Kártyát nem használó személyek  generált tranzakcióinak száma: " + transactions.size());
+        Instant end = Instant.now();
+        long elapsedTime = Duration.between(start, end).toMillis() / 1000;
+        System.out.println("Genrálás időszükséglete: " + elapsedTime + "másodperc");
     }
 
     private void createMothlyPosTransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {
@@ -133,7 +139,7 @@ public class OrdinaryUserDontUseCardTransaction {
         for (Map.Entry<LocalDate, List<PreTransaction>> item : yearlyPretransactionsMap.entrySet()) {
             if (month.equals(item.getKey().getMonth())) {
                 List<PreTransaction> preTransactions = item.getValue();
-                for(PreTransaction preTransaction:preTransactions)
+                for (PreTransaction preTransaction : preTransactions)
                     sum += preTransaction.getAmount();
             }
         }

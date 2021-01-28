@@ -106,10 +106,10 @@ public class RetiredUseCardAndInternetTransaction {
             }
         }
         transactionService.saveAll(transactions);
-        Instant endofSaveAll = Instant.now();
-        long elapsedTime = Duration.between(start, endofSaveAll).toMillis();
-        System.out.println("Retired generálás mentéssel együtt: " + elapsedTime + " ms");
-        System.out.println("Tranzakciók száma: " + transactions.size());
+        Instant end = Instant.now();
+        long elapsedTime = Duration.between(start, end).toMillis() / 1000;
+        System.out.println("Kártyát használó nyugdíjas személyek generált tranzakcióinak száma: " + transactions.size());
+        System.out.println("Genrálás időszükséglete: " + elapsedTime + "másodperc");
     }
 
     private void createDailyPosTransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {
