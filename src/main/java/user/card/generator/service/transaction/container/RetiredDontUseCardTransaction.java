@@ -33,35 +33,26 @@ public class RetiredDontUseCardTransaction {
 
     public void processTransaction(List<Person> people, CurrentYear currentYear, List<City> cities) {
         Random random = new Random();
-        List<Transaction> transactions = new ArrayList<>();
         atmSelector.setHomeRatePercent(100);
         atmSelector.setPrivateBankPercent(100);
         Instant start = Instant.now();
-
-        int num = 1;
         for (Person person : people) {
+            List<Transaction> transactions = new ArrayList<>();
             for (int i = 1; i <= 12; i++) {
                 int ordinalDayNumber = 10 + random.nextInt(4);
                 LocalDate date = LocalDate.of(currentYear.getYear().getValue(), i, ordinalDayNumber);
                 int amount = person.getIncome();
                 Timestamp timestamp = TimestampGenerator.generate(random, date);
                 ATM atm = atmSelector.selectAtm(person);
-                Instant step1 = Instant.now();
-                System.out.println("t: " + Duration.between(start, step1).toMillis());
                 Transaction transaction = new Transaction(person.getCardNumber(), TransactionType.ATM, timestamp, amount, "HUF", ResponseCode.OK, "HU", atm.getATMcode());
-                Instant step2 = Instant.now();
                 transaction.setAllFields(cities);
                 transaction.setFraud(false);
-                num++;
-//                transactionService.save(transaction);
                 transactions.add(transaction);
             }
+            transactionService.saveAll(transactions);
         }
-        transactionService.saveAll(transactions);
         Instant end = Instant.now();
         long elapsedTime = Duration.between(start, end).toMillis() / 1000;
-        System.out.println("Kártyát nem használó nyugdíjas személyek generált tranzakcióinak száma: " + transactions.size());
-        System.out.println("Genrálás időszükséglete: " + elapsedTime + "másodperc");
-    }
+        System.out.println("Kártyát nem használó nyugdíjasok tranzakció generálás időszükséglete: " + elapsedTime + " másodperc");    }
 }
 

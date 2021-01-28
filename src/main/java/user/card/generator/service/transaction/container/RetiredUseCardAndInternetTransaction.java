@@ -56,16 +56,14 @@ public class RetiredUseCardAndInternetTransaction {
     @Autowired
     RetiredSaturdayVendorSelector retiredSaturdayVendorSelector;
 
-
-    @Transactional
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
         Instant start = Instant.now();
         Random random = new Random();
         Country country = countryService.findByCountryCode("HU");
         List<City> cities = cityService.findAllByCountry(country);
-        List<Transaction> transactions = new ArrayList<>();
 
         for (Person person : people) {
+            List<Transaction> transactions = new ArrayList<>();
             int limit;
             Map<Integer, List<LocalDate>> monthsAndDays = currentYear.getMonthsAndDaysInMonth(currentYear.getDays());
             for (Map.Entry<Integer, List<LocalDate>> item : monthsAndDays.entrySet()) {
@@ -84,16 +82,11 @@ public class RetiredUseCardAndInternetTransaction {
                 } else {
                     limit = (int) (person.getIncome() * (70 + random.nextInt(30)) / 100);
                 }
-                System.out.println(month);
                 int sum = 0;
-                System.out.println("limit: " + limit);
-                int numberOfTransactionInGivenMonth = 0;
                 for (List<PreTransaction> preTransactions : pretransactionsMap.values()) {
                     for (int i = 0; i < preTransactions.size() && (sum < limit); i++) {
                         PreTransaction preTransaction = preTransactions.get(i);
                         sum += preTransaction.getAmount();
-                        System.out.println("sum: " + sum);
-                        System.out.println("i: " + i);
                         if (sum < limit) {
                             Transaction transaction = new Transaction(preTransaction.getCardNumber(), preTransaction.getTransactionType()
                                     , preTransaction.getTimestamp(), preTransaction.getAmount(), "HUF", ResponseCode.OK, "HU", preTransaction.getVendorCode());
@@ -104,12 +97,11 @@ public class RetiredUseCardAndInternetTransaction {
                     }
                 }
             }
+            transactionService.saveAll(transactions);
         }
-        transactionService.saveAll(transactions);
         Instant end = Instant.now();
         long elapsedTime = Duration.between(start, end).toMillis() / 1000;
-        System.out.println("Kártyát használó nyugdíjas személyek generált tranzakcióinak száma: " + transactions.size());
-        System.out.println("Genrálás időszükséglete: " + elapsedTime + "másodperc");
+        System.out.println("Kártyát használó nyugdíjasok tranzakció generálás időszükséglete: " + elapsedTime + " másodperc");
     }
 
     private void createDailyPosTransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {
@@ -146,7 +138,6 @@ public class RetiredUseCardAndInternetTransaction {
 
     private void createMonthlyAtmTransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {
         int occasions = 4 + random.nextInt(5);
-        System.out.println("Occasion: " + occasions);
         for (int i = 0; i < occasions; i++) {
             LocalDate day = daysInCurrentMonth.get(random.nextInt(daysInCurrentMonth.size()));
             int amount = 5000 + random.nextInt(5001);

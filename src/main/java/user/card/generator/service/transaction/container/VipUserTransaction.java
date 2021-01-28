@@ -45,14 +45,13 @@ public class VipUserTransaction {
     @Autowired
     OrdinaryVendorSelector ordinaryVendorSelector;
 
-    @Transactional
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
         Random random = new Random();
         Country country = countryService.findByCountryCode("HU");
         List<City> cities = cityService.findAllByCountry(country);
-        List<Transaction> transactions = new ArrayList<>();
         Instant start = Instant.now();
         for (Person person : people) {
+            List<Transaction> transactions = new ArrayList<>();
             int limit = 3000000;
             Map<Integer, List<LocalDate>> monthsAndDays = currentYear.getMonthsAndDaysInMonth(currentYear.getDays());
             for (Map.Entry<Integer, List<LocalDate>> item : monthsAndDays.entrySet()) {
@@ -80,13 +79,11 @@ public class VipUserTransaction {
                     }
                 }
             }
-
+            transactionService.saveAll(transactions);
         }
-        transactionService.saveAll(transactions);
         Instant end = Instant.now();
         long elapsedTime = Duration.between(start, end).toMillis() / 1000;
-        System.out.println("Kártyát használó nyugdíjas személyek generált tranzakcióinak száma: " + transactions.size());
-        System.out.println("Genrálás időszükséglete: " + elapsedTime + "másodperc");
+        System.out.println("VIP Generálás időszükséglete: " + elapsedTime + " másodperc");
     }
 
     private void createMonthlyAtmTransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {

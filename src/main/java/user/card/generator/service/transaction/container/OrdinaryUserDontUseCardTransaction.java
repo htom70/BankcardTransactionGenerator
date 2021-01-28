@@ -46,14 +46,13 @@ public class OrdinaryUserDontUseCardTransaction {
     @Autowired
     OrdinaryVendorSelector ordinaryVendorSelector;
 
-    @Transactional
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
         Random random = new Random();
         Country country = countryService.findByCountryCode("HU");
         List<City> cities = cityService.findAllByCountry(country);
-        List<Transaction> transactions = new ArrayList<>();
         Instant start = Instant.now();
         for (Person person : people) {
+            List<Transaction> transactions = new ArrayList<>();
             int limit = 400000;
             Map<Integer, List<LocalDate>> monthsAndDays = currentYear.getMonthsAndDaysInMonth(currentYear.getDays());
             for (Map.Entry<Integer, List<LocalDate>> item : monthsAndDays.entrySet()) {
@@ -72,8 +71,6 @@ public class OrdinaryUserDontUseCardTransaction {
                         sum = calculateSumAmontUponYearlyTransactionAndCurrentMonht(month, yearlyPretransactionsMap);
                         PreTransaction preTransaction = preTransactions.get(i);
                         sum += preTransaction.getAmount();
-                        System.out.println("sum: " + sum);
-                        System.out.println("i: " + i);
                         if (sum < limit) {
                             Transaction transaction = new Transaction(preTransaction.getCardNumber(), preTransaction.getTransactionType()
                                     , preTransaction.getTimestamp(), preTransaction.getAmount(), "HUF", ResponseCode.OK, "HU", preTransaction.getVendorCode());
@@ -84,12 +81,11 @@ public class OrdinaryUserDontUseCardTransaction {
                     }
                 }
             }
+            transactionService.saveAll(transactions);
         }
-        transactionService.saveAll(transactions);
-        System.out.println("Kártyát nem használó személyek  generált tranzakcióinak száma: " + transactions.size());
         Instant end = Instant.now();
         long elapsedTime = Duration.between(start, end).toMillis() / 1000;
-        System.out.println("Genrálás időszükséglete: " + elapsedTime + "másodperc");
+        System.out.println("Kártyát nem használó használó személyek tranzakció generálás időszükséglete: " +elapsedTime+" másodperc");
     }
 
     private void createMothlyPosTransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {
