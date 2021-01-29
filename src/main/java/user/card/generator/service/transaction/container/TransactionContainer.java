@@ -61,6 +61,7 @@ public class TransactionContainer {
         vipUserTransaction.processTransaction(vipPeople, currentYear);
 
 
+
         //        List<Person> testUsers = new ArrayList<>();
 //        testUsers.add(retiredUseCard.get(0));
 //        retiredUseCardAndInternetTransaction.processTransaction(testUsers,currentYear);

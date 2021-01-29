@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @NoArgsConstructor
@@ -222,6 +223,7 @@ public class Transaction {
         this.fraud = fraud;
     }
 
+
     private boolean checkIfField26containsAWomanName() {
         WomanName[] names = WomanName.values();
         List<String> nameCollection = new ArrayList<>();
@@ -230,5 +232,297 @@ public class Transaction {
             nameCollection.add(name);
         }
         return nameCollection.contains(field26);
+    }
+
+    public List<Optional<String>> getAllExtraFields() {
+        List<Optional<String>> result = new ArrayList<>();
+        if (this.getField1() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField1().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField2() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField2().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField3() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField3().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField4() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField4().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField5() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField5().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField6() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField6().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField7() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField7().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField8() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField8().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField9() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField9().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField10() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField10().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField11() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField11().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField12() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField12().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField13() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField13().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField14() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField14().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField15() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField15().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField16() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField16().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField17() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField17().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField18() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField18().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField19() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField19().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField20() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField20().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField21() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField21().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField22() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField22().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField23() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField23().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField24() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField24().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField25() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField25().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField26() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField26());
+            result.add(fieldWithValue);
+        }
+        if (this.getField27() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField27());
+            result.add(fieldWithValue);
+        }
+        if (this.getField28() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField28());
+            result.add(fieldWithValue);
+        }
+        if (this.getField29() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField29());
+            result.add(fieldWithValue);
+        }
+        if (this.getField30() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField30());
+            result.add(fieldWithValue);
+        }
+        if (this.getField31() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField31());
+            result.add(fieldWithValue);
+        }
+        if (this.getField32() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField32());
+            result.add(fieldWithValue);
+        }
+        if (this.getField33() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField33());
+            result.add(fieldWithValue);
+        }
+        if (this.getField34() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField34());
+            result.add(fieldWithValue);
+        }
+        if (this.getField35() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField35());
+            result.add(fieldWithValue);
+        }
+        if (this.getField36() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField36().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField37() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField37().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField38() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField38().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField39() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField39().toString());
+            result.add(fieldWithValue);
+        }
+        if (this.getField40() == null) {
+            Optional<String> empty = Optional.empty();
+            result.add(empty);
+        } else {
+            Optional<String> fieldWithValue = Optional.of(this.getField40().toString());
+            result.add(fieldWithValue);
+        }
+        result.add(this.getFruaud());
+        return result;
+    }
+
+    private Optional<String> getFruaud() {
+        int value = fraud ? 1 : 0;
+        Optional<String> fieldWithValue = Optional.of(String.valueOf(value));
+        return fieldWithValue;
     }
 }
