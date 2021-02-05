@@ -18,11 +18,11 @@ public class FraudContainer {
 
     public void process(CurrentYear currentYear) {
         Instant startStep1 = Instant.now();
-//        System.out.println("Azonos vendor csalás generálás kezdete.");
-//        multiplePosPayPassTransactionAtSameVendor.createFrauds(currentYear);
+        System.out.println("Azonos vendor csalás generálás kezdete.");
+        multiplePosPayPassTransactionAtSameVendor.createFrauds(currentYear);
         Instant endStep1 = Instant.now();
         long elapsedTime = Duration.between(startStep1, endStep1).toMillis() / 1000;
-//        System.out.println("Azonos vendornál generált csalás tranzakciók előállítási ideje: " + elapsedTime + " másodperc");
+        System.out.println("Azonos vendornál generált csalás tranzakciók előállítási ideje: " + elapsedTime + " másodperc");
         System.out.println("Adott városban elkövetett csalás generálás kezdete.");
         multiplePosPayPassTransactionInSameCity.createFrauds(currentYear);
         Instant endStep2 = Instant.now();

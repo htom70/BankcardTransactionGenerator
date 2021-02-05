@@ -16,6 +16,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -39,9 +40,10 @@ public class CSVHandlerService {
     public void writeData(String filePath) {
 
         Instant start = Instant.now();
-        int numberOfRows = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM creditcard_transaction.transaction", Integer.class);
+//        int numberOfRows = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM creditcard_transaction.transaction", Integer.class);
+        int numberOfRows = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM transaction", Integer.class);
         System.out.println("Rekordok száma: " + numberOfRows);
-        int pages=numberOfRows/1000000;
+        int pages=numberOfRows/100;
         Page<Transaction> transactions = null;
 //        List<Transaction> transactions = transactionRepository.findAll();
 
@@ -56,20 +58,23 @@ public class CSVHandlerService {
                     "field38", "field39", "field40","fraud"};
             writer.writeNext(header);
             String[] data = new String[49];
-            for (int i = 0; i < pages+1; i++) {
-                transactions= transactionRepository.findAll(PageRequest.of(i, 1000000));
+//            for (int i = 0; i < pages+1; i++) {
+            for (int i = 0; i < 1; i++) {
+                transactions= transactionRepository.findAll(PageRequest.of(i, 100));
                 for (Transaction transaction : transactions) {
                     List<Optional<String>> extraFields = transaction.getAllExtraFields();
                     data[0] = transaction.getCardNumber();
                     data[1] = transaction.getTransactionType().toString();
-                    data[2] = String.valueOf(transaction.getTimestamp());
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+                    data[2] = dateFormat.format(transaction.getTimestamp());
+//                    data[2] = String.valueOf(transaction.getTimestamp());
                     data[3] = String.valueOf(transaction.getAmount());
                     data[4] = transaction.getCurrencyName();
                     data[5] = transaction.getCountryName();
                     data[6] = transaction.getResponseCode().toString();
                     data[7] = transaction.getVendorCode();
                     for (int j = 0; j < extraFields.size(); j++) {
-                        data[j + 7] = extraFields.get(j).isPresent() ? extraFields.get(j).get() : "null";
+                        data[j + 8] = extraFields.get(j).isPresent() ? extraFields.get(j).get() : "null";
                     }
                     writer.writeNext(data, true);
                 }
