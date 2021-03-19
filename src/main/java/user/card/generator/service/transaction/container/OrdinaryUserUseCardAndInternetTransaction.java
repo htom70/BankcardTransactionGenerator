@@ -51,7 +51,7 @@ public class OrdinaryUserUseCardAndInternetTransaction {
     OrdinaryVendorSelector ordinaryVendorSelector;
 
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
-        Random random = new Random();
+        Random random = new Random(13);
         Country country = countryService.findByCountryCode("HU");
         List<City> cities = cityService.findAllByCountry(country);
         Instant start = Instant.now();
@@ -82,6 +82,7 @@ public class OrdinaryUserUseCardAndInternetTransaction {
                     }
                 }
             }
+            System.out.println("Kártyát és internetet használó személy tranzakcióinak száma: " + transactions.size());
             transactionService.saveAll(transactions);
         }
         Instant end = Instant.now();

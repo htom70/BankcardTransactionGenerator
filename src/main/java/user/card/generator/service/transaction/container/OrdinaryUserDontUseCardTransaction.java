@@ -47,7 +47,7 @@ public class OrdinaryUserDontUseCardTransaction {
     OrdinaryVendorSelector ordinaryVendorSelector;
 
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
-        Random random = new Random();
+        Random random = new Random(5);
         Country country = countryService.findByCountryCode("HU");
         List<City> cities = cityService.findAllByCountry(country);
         Instant start = Instant.now();
@@ -81,11 +81,12 @@ public class OrdinaryUserDontUseCardTransaction {
                     }
                 }
             }
+            System.out.println("Kártyát nem használó személy tranzakcióinak száma: " + transactions.size());
             transactionService.saveAll(transactions);
         }
         Instant end = Instant.now();
         long elapsedTime = Duration.between(start, end).toMillis() / 1000;
-        System.out.println("Kártyát nem használó használó személyek tranzakció generálás időszükséglete: " +elapsedTime+" másodperc");
+        System.out.println("Kártyát nem használó személyek tranzakció generálás időszükséglete: " +elapsedTime+" másodperc");
     }
 
     private void createMothlyPosTransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {

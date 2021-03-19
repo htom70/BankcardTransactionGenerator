@@ -46,7 +46,7 @@ public class VipUserTransaction {
     OrdinaryVendorSelector ordinaryVendorSelector;
 
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
-        Random random = new Random();
+        Random random = new Random(19);
         Country country = countryService.findByCountryCode("HU");
         List<City> cities = cityService.findAllByCountry(country);
         Instant start = Instant.now();
@@ -67,8 +67,6 @@ public class VipUserTransaction {
                     for (int i = 0; i < preTransactions.size() && (sum < limit); i++) {
                         PreTransaction preTransaction = preTransactions.get(i);
                         sum += preTransaction.getAmount();
-                        System.out.println("sum: " + sum);
-                        System.out.println("i: " + i);
                         if (sum < limit) {
                             Transaction transaction = new Transaction(preTransaction.getCardNumber(), preTransaction.getTransactionType()
                                     , preTransaction.getTimestamp(), preTransaction.getAmount(), "HUF", ResponseCode.OK, "HU", preTransaction.getVendorCode());
@@ -79,6 +77,7 @@ public class VipUserTransaction {
                     }
                 }
             }
+            System.out.println("VIP használó tranzakcióinak száma: " + transactions.size());
             transactionService.saveAll(transactions);
         }
         Instant end = Instant.now();

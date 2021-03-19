@@ -6,7 +6,6 @@ import user.card.generator.domain.city.City;
 import user.card.generator.domain.country.Country;
 import user.card.generator.domain.vendor.ATM;
 import user.card.generator.domain.vendor.Bank;
-import user.card.generator.domain.vendor.Vendor;
 import user.card.generator.repository.ATMrepository;
 import user.card.generator.service.singleton.NumberStringGenerator;
 
@@ -55,17 +54,35 @@ public class ATMservice {
         return atMrepository.findAllByCityIsNot(city);
     }
 
+    public List<ATM> findAllByCityAndBank(City city, Bank bank) {
+        return atMrepository.findAllByCityAndBank(city, bank);
+    }
+
+    public List<ATM> findAllByCityIsNotAndBank(City city, Bank bank) {
+        return atMrepository.findAllByCityIsNotAndBank(city, bank);
+    }
+
+    public List<ATM> findAllByCityAndBankIsNot(City city, Bank bank) {
+        return atMrepository.findAllByCityAndBankIsNot(city, bank);
+    }
+
+    public List<ATM> findAllByCityIsNotAndBankIsNot(City city, Bank bank) {
+        return atMrepository.findAllByCityIsNotAndBankIsNot(city, bank);
+    }
+
+
     public void generateHungarianATMs() {
         List<ATM> atms = new ArrayList<>();
         Country countryHungary = countryService.findByCountryCode("HU");
+        List<City> cities = new ArrayList<>();
         List<City> citiesInHungary = cityService.findAllByCountry(countryHungary);
-        City cityOfBudapest = cityService.findByName("Budapest");
-        City cityOfDebrecen = cityService.findByName("Debrecen");
-        City cityOfSzeged = cityService.findByName("Szeged");
-        City cityOfMiskolc = cityService.findByName("Miskolc");
-        City cityOfPecs = cityService.findByName("Pécs");
-        City cityOfGyor = cityService.findByName("Győr");
-        City cityOfNyiregyhaza = cityService.findByName("Nyiregyhaza");
+        City cityOfBudapest = cityService.findByNameAndQueryAtms("Budapest");
+        City cityOfDebrecen = cityService.findByNameAndQueryAtms("Debrecen");
+        City cityOfSzeged = cityService.findByNameAndQueryAtms("Szeged");
+        City cityOfMiskolc = cityService.findByNameAndQueryAtms("Miskolc");
+        City cityOfPecs = cityService.findByNameAndQueryAtms("Pécs");
+        City cityOfGyor = cityService.findByNameAndQueryAtms("Győr");
+        City cityOfNyiregyhaza = cityService.findByNameAndQueryAtms("Nyiregyhaza");
         citiesInHungary.remove(cityOfBudapest);
         citiesInHungary.remove(cityOfGyor);
         citiesInHungary.remove(cityOfPecs);
@@ -83,6 +100,8 @@ public class ATMservice {
                 if (atmCodeIterator.hasNext()) {
                     ATM atm = new ATM(atmCodeIterator.next(), cityOfBudapest, currentBank);
                     atms.add(atm);
+                    cityOfBudapest.addATM(atm);
+                    cities.add(cityOfBudapest);
                 }
             }
         }
@@ -91,6 +110,8 @@ public class ATMservice {
                 if (atmCodeIterator.hasNext()) {
                     ATM atm = new ATM(atmCodeIterator.next(), cityOfDebrecen, currentBank);
                     atms.add(atm);
+                    cityOfDebrecen.addATM(atm);
+                    cities.add(cityOfDebrecen);
                 }
             }
         }
@@ -99,6 +120,8 @@ public class ATMservice {
                 if (atmCodeIterator.hasNext()) {
                     ATM atm = new ATM(atmCodeIterator.next(), cityOfGyor, currentBank);
                     atms.add(atm);
+                    cityOfGyor.addATM(atm);
+                    cities.add(cityOfGyor);
                 }
             }
         }
@@ -107,6 +130,8 @@ public class ATMservice {
                 if (atmCodeIterator.hasNext()) {
                     ATM atm = new ATM(atmCodeIterator.next(), cityOfMiskolc, currentBank);
                     atms.add(atm);
+                    cityOfMiskolc.addATM(atm);
+                    cities.add(cityOfMiskolc);
                 }
             }
         }
@@ -115,6 +140,8 @@ public class ATMservice {
                 if (atmCodeIterator.hasNext()) {
                     ATM atm = new ATM(atmCodeIterator.next(), cityOfNyiregyhaza, currentBank);
                     atms.add(atm);
+                    cityOfNyiregyhaza.addATM(atm);
+                    cities.add(cityOfNyiregyhaza);
                 }
             }
         }
@@ -123,6 +150,8 @@ public class ATMservice {
                 if (atmCodeIterator.hasNext()) {
                     ATM atm = new ATM(atmCodeIterator.next(), cityOfPecs, currentBank);
                     atms.add(atm);
+                    cityOfPecs.addATM(atm);
+                    cities.add(cityOfPecs);
                 }
             }
         }
@@ -131,6 +160,8 @@ public class ATMservice {
                 if (atmCodeIterator.hasNext()) {
                     ATM atm = new ATM(atmCodeIterator.next(), cityOfSzeged, currentBank);
                     atms.add(atm);
+                    cityOfSzeged.addATM(atm);
+                    cities.add(cityOfSzeged);
                 }
             }
         }
@@ -139,9 +170,11 @@ public class ATMservice {
                 if (atmCodeIterator.hasNext()) {
                     ATM atm = new ATM(atmCodeIterator.next(), littleCity, currentBank);
                     atms.add(atm);
+                    cities.add(littleCity);
                 }
             }
         }
         saveAllATMs(atms);
+        cityService.saveAllCities(cities);
     }
 }

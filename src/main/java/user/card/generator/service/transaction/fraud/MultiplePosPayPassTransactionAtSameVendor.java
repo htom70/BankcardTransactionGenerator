@@ -1,6 +1,7 @@
 package user.card.generator.service.transaction.fraud;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import user.card.generator.domain.ResponseCode;
 import user.card.generator.domain.city.City;
@@ -38,20 +39,24 @@ public class MultiplePosPayPassTransactionAtSameVendor {
     @Autowired
     PersonService personService;
 
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
     public void createFrauds(CurrentYear currentYear) {
         Random random = new Random();
-//        int sumOfTransaction = transactionService.findAll().size();
-        int sumOfTransaction = 6566011;
-        int numberOfFrauds = (int) (sumOfTransaction * 0.004);
+        int numberOfTransaction = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM transaction", Integer.class);
+//        int numberOfFrauds = (int) (numberOfTransaction * 0.001); //5 % csalás
+//        int numberOfFrauds = (int) (numberOfTransaction * 0.0002); //1 % csalás
+        int numberOfFrauds = (int) (numberOfTransaction * 0.0000625); //0.2 % csalás
         Country Hungary = countryService.findByCountryCode("HU");
         List<City> cities = cityService.findAllByCountry(Hungary);
-        List<Vendor> vendors = vendorService.findAll();
-        int numberOfVendors = vendors.size();
+        List<Vendor> activeVendors = vendorService.findAllVendorInNormalTransaction();
+        int numberOfVendors = activeVendors.size();
         List<Person> people = personService.findAll();
         int numberOfPeople = people.size();
         for (int i = 0; i < numberOfFrauds; i++) {
             List<Transaction> transactions = new ArrayList<>();
-            Vendor vendor = vendors.get(random.nextInt(numberOfVendors));
+            Vendor vendor = activeVendors.get(random.nextInt(numberOfVendors));
             Person person = people.get(random.nextInt(numberOfPeople));
             List<LocalDate> days = currentYear.getDays();
             LocalDate currentDate = days.get(random.nextInt(days.size()));

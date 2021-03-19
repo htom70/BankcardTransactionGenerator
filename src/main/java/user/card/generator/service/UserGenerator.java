@@ -251,10 +251,9 @@ public class UserGenerator {
         }
         Instant endofGeneration = Instant.now();
         long timeOfGeneration = Duration.between(start, endofGeneration).toMillis();
-        System.out.println("User generálás időtartama: " + timeOfGeneration);
         personRepository.saveAll(people);
         Instant endOfSaveAll = Instant.now();
-        long elapsedTime = Duration.between(start, endOfSaveAll).toMillis();
+        long elapsedTime = Duration.between(start, endOfSaveAll).toMillis()/1000;
         System.out.println("User generálás teljes időtartama mentéssel együtt: " + elapsedTime);
     }
 

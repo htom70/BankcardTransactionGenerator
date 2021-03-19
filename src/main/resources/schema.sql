@@ -49,6 +49,6 @@ create table transaction
     field38          date,
     field39          date,
     field40          date,
-    fraud            bit,
+    fraud            int,
     primary key (id)
 ) engine = InnoDB

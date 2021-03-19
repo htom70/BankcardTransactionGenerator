@@ -5,29 +5,30 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import user.card.generator.domain.city.City;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
 @Data
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class ATM extends AbstractVendor {
+public class ATM {
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
 
     private String ATMcode;
 
     @ManyToOne
     private Bank bank;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private City city;
 
     public ATM(String ATMcode, City city, Bank bank) {
+        this.city=city;
         this.ATMcode = ATMcode;
-        this.city = city;
         this.bank = bank;
     }
 }

@@ -49,16 +49,16 @@ public class TransactionContainer {
         List<City> cities = cityService.findAllByCountry(country);
         List<Person> retiredDontUseCardPeople = personService.findPeopleUponCategory(PersonCategory.RETIRED_DONT_USE_CARD_AND_INTERNET);
         retiredDontUseCardTransaction.processTransaction(retiredDontUseCardPeople, currentYear, cities);
-//        List<Person> retiredUseCardPeople = personService.findPeopleUponCategory(PersonCategory.RETIRED_USE_CARD_AND_INTERNET);
-//        retiredUseCardAndInternetTransaction.processTransaction(retiredUseCardPeople,currentYear);
-//        List<Person> ordinaryUserUseCardAndInternetPeople = personService.findPeopleUponCategory(PersonCategory.ORDINARYUSER_USE_CARD_AND_INTERNET);
-//        ordinaryUserUseCardAndInternetTransaction.processTransaction(ordinaryUserUseCardAndInternetPeople,currentYear);
-//        List<Person> ordinaryUserUseCardDontUseInternetPeople = personService.findPeopleUponCategory(PersonCategory.ORDINARYUSER_USE_CARD_AND_INTERNET);
-//        ordinaryUseCardDontUseInternetTransaction.processTransaction(ordinaryUserUseCardDontUseInternetPeople,currentYear);
-//        List<Person> ordinaryUserDontUseCardAndInternetPeople = personService.findPeopleUponCategory(PersonCategory.ORDINARYUSER_USE_CARD_AND_INTERNET);
-//        ordinaryUserDontUseCardTransaction.processTransaction(ordinaryUserDontUseCardAndInternetPeople,currentYear);
-//        List<Person> vipPeople = personService.findPeopleUponCategory(PersonCategory.VIP_USER);
-//        vipUserTransaction.processTransaction(vipPeople, currentYear);
+        List<Person> retiredUseCardPeople = personService.findPeopleUponCategory(PersonCategory.RETIRED_USE_CARD_AND_INTERNET);
+        retiredUseCardAndInternetTransaction.processTransaction(retiredUseCardPeople,currentYear);
+        List<Person> ordinaryUserUseCardAndInternetPeople = personService.findPeopleUponCategory(PersonCategory.ORDINARYUSER_USE_CARD_AND_INTERNET);
+        ordinaryUserUseCardAndInternetTransaction.processTransaction(ordinaryUserUseCardAndInternetPeople,currentYear);
+        List<Person> ordinaryUserUseCardDontUseInternetPeople = personService.findPeopleUponCategory(PersonCategory.ORDINARYUSER_USE_CARD_AND_INTERNET);
+        ordinaryUseCardDontUseInternetTransaction.processTransaction(ordinaryUserUseCardDontUseInternetPeople,currentYear);
+        List<Person> ordinaryUserDontUseCardAndInternetPeople = personService.findPeopleUponCategory(PersonCategory.ORDINARYUSER_USE_CARD_AND_INTERNET);
+        ordinaryUserDontUseCardTransaction.processTransaction(ordinaryUserDontUseCardAndInternetPeople,currentYear);
+        List<Person> vipPeople = personService.findPeopleUponCategory(PersonCategory.VIP_USER);
+        vipUserTransaction.processTransaction(vipPeople, currentYear);
 
 
 

@@ -7,8 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import user.card.generator.domain.city.City;
 import user.card.generator.domain.city.County;
 import user.card.generator.domain.country.Country;
+import user.card.generator.domain.transaction.Transaction;
+import user.card.generator.domain.vendor.Vendor;
 import user.card.generator.repository.CityRepository;
 import user.card.generator.repository.CountyRepository;
+import user.card.generator.repository.TransactionRepository;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -19,6 +22,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
+@Transactional
 @Service
 public class CityService {
 
@@ -31,6 +35,9 @@ public class CityService {
     @Autowired
     CountryService countryService;
 
+    @Autowired
+    TransactionRepository transactionRepository;
+
     public void saveCity(City city) {
         cityRepository.save(city);
     }
@@ -39,15 +46,32 @@ public class CityService {
         cityRepository.saveAll(cities);
     }
 
-    public City findByName(String name) {
-        return cityRepository.findByName(name);
+    public City findByNameAndQueryVendors(String name) {
+        return cityRepository.findByNameAndQueryVendors(name);
+    }
+
+    public City findByNameAndQueryAtms(String name) {
+        return cityRepository.findByNameAndQueryAtms(name);
     }
 
     public List<City> findByNameNotIn(List<String> citinames) {
         return cityRepository.findAllByNameNotIn(citinames);
     }
 
+    public List<City> findAllByNameNotInAndQueryVendors(List<String> citinames) {
+        return cityRepository.findAllByNameNotInAndQueryVendors(new HashSet<>(citinames));
+    }
+
     public List<City> findAllByCountry(Country country) {
+        return cityRepository.findAllByCountry(country);
+    }
+
+    public List<City> findAllByActiveVendors(List<Vendor> vendors) {
+        return cityRepository.findAllByActiveVendors(new HashSet<>(vendors));
+    }
+
+    public List<City> findAllInNormalTransactionByCountry(Country country) {
+        List<Transaction> normalTransactions = transactionRepository.findAllNormalTransaction();
         return cityRepository.findAllByCountry(country);
     }
 
@@ -58,13 +82,13 @@ public class CityService {
     public Map<String, List<City>> getCitiesByNames() {
         Map<String, List<City>> result = new HashMap<>();
         List<City> cities = cityRepository.findAll();
-        City cityOfBudapest = cityRepository.findByName("Budapest");
-        City cityIOfDebrecen = cityRepository.findByName("Debrecen");
-        City cityOfSzeged = cityRepository.findByName("Szeged");
-        City cityOfNyiregyhaza = cityRepository.findByName("Nyíregyháza");
-        City cityOfMiskolc = cityRepository.findByName("Miskolc");
-        City cityOfPécs = cityRepository.findByName("Pécs");
-        City cityOfGyor = cityRepository.findByName("Győr");
+        City cityOfBudapest = cityRepository.findByNameAndQueryVendors("Budapest");
+        City cityIOfDebrecen = cityRepository.findByNameAndQueryVendors("Debrecen");
+        City cityOfSzeged = cityRepository.findByNameAndQueryVendors("Szeged");
+        City cityOfNyiregyhaza = cityRepository.findByNameAndQueryVendors("Nyíregyháza");
+        City cityOfMiskolc = cityRepository.findByNameAndQueryVendors("Miskolc");
+        City cityOfPécs = cityRepository.findByNameAndQueryVendors("Pécs");
+        City cityOfGyor = cityRepository.findByNameAndQueryVendors("Győr");
         result.put("Budapest", new ArrayList<>(Arrays.asList(cityOfBudapest)));
         result.put("Debrecen", new ArrayList<>(Arrays.asList(cityIOfDebrecen)));
         result.put("Szeged", new ArrayList<>(Arrays.asList(cityOfSzeged)));
@@ -92,7 +116,7 @@ public class CityService {
 
         Instant start = Instant.now();
         try {
-            reader = Files.newBufferedReader(Paths.get("C:\\Temp\\iranyitoszamok_utf8.csv"), Charset.forName("UTF-8"));
+            reader = Files.newBufferedReader(Paths.get("/home/mki/csv/iranyitoszamok_utf8.csv"), Charset.forName("UTF-8"));
             CSVReader csvReader = new CSVReader(reader);
             List<String[]> records = csvReader.readAll();
             Iterator<String[]> iterator = records.iterator();
@@ -120,9 +144,10 @@ public class CityService {
                     }
                     city.setCounty(county);
                 }
-                cityRepository.save(city);
+//                cityRepository.save(city);
                 cities.add(city);
             }
+            cityRepository.saveAll(cities);
             System.out.println("City list length: " + cities.size());
             Instant end = Instant.now();
             long elapsedTime = Duration.between(start, end).toMillis();

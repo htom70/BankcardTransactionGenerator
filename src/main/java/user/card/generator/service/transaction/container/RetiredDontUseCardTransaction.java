@@ -32,7 +32,7 @@ public class RetiredDontUseCardTransaction {
     AtmSelector atmSelector;
 
     public void processTransaction(List<Person> people, CurrentYear currentYear, List<City> cities) {
-        Random random = new Random();
+        Random random = new Random(3);
         atmSelector.setHomeRatePercent(100);
         atmSelector.setPrivateBankPercent(100);
         Instant start = Instant.now();
@@ -49,6 +49,7 @@ public class RetiredDontUseCardTransaction {
                 transaction.setFraud(false);
                 transactions.add(transaction);
             }
+            System.out.println("Kártyát nem használó nyugdíjas tranzakcióinak száma: " + transactions.size());
             transactionService.saveAll(transactions);
         }
         Instant end = Instant.now();

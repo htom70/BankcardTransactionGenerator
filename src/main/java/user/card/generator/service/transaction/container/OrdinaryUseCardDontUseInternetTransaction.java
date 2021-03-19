@@ -46,7 +46,7 @@ public class OrdinaryUseCardDontUseInternetTransaction {
     OrdinaryVendorSelector ordinaryVendorSelector;
 
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
-        Random random = new Random();
+        Random random = new Random(9);
         Country country = countryService.findByCountryCode("HU");
         List<City> cities = cityService.findAllByCountry(country);
         Instant start = Instant.now();
@@ -83,11 +83,12 @@ public class OrdinaryUseCardDontUseInternetTransaction {
                     }
                 }
             }
+            System.out.println("Kártyát használó, internetet nem használó személy tranzakcióinak száma: " + transactions.size());
             transactionService.saveAll(transactions);
         }
         Instant end = Instant.now();
         long elapsedTime = Duration.between(start, end).toMillis() / 1000;
-        System.out.println("Kártyát nem használó használó személyek tranzakció generálás időszükséglete: " + elapsedTime + " másodperc");
+        System.out.println("Kártyát használó, internetet nem használó személyek tranzakció generálás időszükséglete: " + elapsedTime + " másodperc");
     }
 
     private void createYearlyPosTransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {

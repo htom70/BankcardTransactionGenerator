@@ -36,9 +36,10 @@ public class RetiredDailyVendorSelector implements VendorSelector {
 
         if (!storedCities.contains(currentCity)) {
             storedCities.add(currentCity);
-            vendorsInHomeCity = vendors.parallelStream()
-                    .filter(vendor -> vendor.getCity().equals(currentCity))
-                    .collect(Collectors.toList());
+//            vendorsInHomeCity = vendors.parallelStream()
+//                    .filter(vendor -> vendor.getCity().equals(currentCity))
+//                    .collect(Collectors.toList());
+            vendorsInHomeCity = vendorService.findAllByCity(currentCity);
             vendorsInHomeCityStoredByCity.put(currentCity, vendorsInHomeCity);
         }
         if (!storedPerson.contains(person)) {

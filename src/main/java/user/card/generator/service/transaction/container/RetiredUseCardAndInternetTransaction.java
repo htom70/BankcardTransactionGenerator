@@ -58,7 +58,7 @@ public class RetiredUseCardAndInternetTransaction {
 
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
         Instant start = Instant.now();
-        Random random = new Random();
+        Random random = new Random(7);
         Country country = countryService.findByCountryCode("HU");
         List<City> cities = cityService.findAllByCountry(country);
 
@@ -97,11 +97,12 @@ public class RetiredUseCardAndInternetTransaction {
                     }
                 }
             }
+            System.out.println("Kártyát és internetet használó nyugdíjas tranzakcióinak száma: " + transactions.size());
             transactionService.saveAll(transactions);
         }
         Instant end = Instant.now();
         long elapsedTime = Duration.between(start, end).toMillis() / 1000;
-        System.out.println("Kártyát használó nyugdíjasok tranzakció generálás időszükséglete: " + elapsedTime + " másodperc");
+        System.out.println("Kártyát és internetet használó nyugdíjasok tranzakció generálás időszükséglete: " + elapsedTime + " másodperc");
     }
 
     private void createDailyPosTransaction(Map<LocalDate, List<PreTransaction>> pretransactionsMap, Person person, CurrentYear currentYear, Month month, List<LocalDate> daysInCurrentMonth, Random random) {

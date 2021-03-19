@@ -1,22 +1,25 @@
 package user.card.generator.domain.vendor;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.stereotype.Service;
 import user.card.generator.domain.city.City;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
-@PrimaryKeyJoinColumn
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Vendor extends AbstractVendor {
+public class Vendor {
+
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
 
     private String vendorCode;
 
@@ -24,8 +27,8 @@ public class Vendor extends AbstractVendor {
     private City city;
 
     public Vendor(String vendorCode, City city) {
-        this.vendorCode = vendorCode;
         this.city = city;
+        this.vendorCode = vendorCode;
     }
 }
 

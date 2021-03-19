@@ -1,5 +1,6 @@
 package user.card.generator;
 
+import org.mariadb.jdbc.MariaDbPoolDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,9 +18,14 @@ import user.card.generator.service.transaction.container.TransactionContainer;
 import user.card.generator.service.transaction.fraud.FraudContainer;
 import user.card.generator.time.CurrentYear;
 
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+import java.lang.management.ManagementFactory;
+import java.sql.Connection;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Random;
+import java.util.Set;
 
 @SpringBootApplication
 public class GeneratorApplication implements CommandLineRunner {
@@ -83,7 +89,7 @@ public class GeneratorApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Random random = new Random();
+        Random random = new Random(41);
 
         CurrentYear currentYear = new CurrentYear(2012);
 
@@ -147,8 +153,8 @@ public class GeneratorApplication implements CommandLineRunner {
             userGenerator.generatePerson(random);
             System.out.println("User generálás vége.");
             Instant end = Instant.now();
-            long elapsedTime = Duration.between(start, end).toMillis();
-            System.out.println("User generálási ideje: " + elapsedTime + " ms");
+            long elapsedTime = Duration.between(start, end).toMillis()/1000;
+            System.out.println("User generálási ideje: " + elapsedTime + " másodperc");
             System.out.println("Generált User-ek száma: " + personService.findAll().size());
             System.out.println("Kártyát használó nyugdíjasok száma: " + personService.findPeopleUponCategory(PersonCategory.RETIRED_USE_CARD_AND_INTERNET).size());
             System.out.println("Kártyát használó, internetet nem használó nyugdíjasok száma: " + personService.findPeopleUponCategory(PersonCategory.RETIRED_DONT_USE_CARD_AND_INTERNET).size());
@@ -165,14 +171,14 @@ public class GeneratorApplication implements CommandLineRunner {
             transactionContainer.process(currentYear);
             System.out.println("Tranzakció generálás vége.");
             Instant end = Instant.now();
-            long elapsedTime = Duration.between(start, end).toMillis();
-            System.out.println("Tranzakció generálási ideje: " + elapsedTime + " ms");
+            long elapsedTime = Duration.between(start, end).toMillis()/1000;
+            System.out.println("Tranzakció generálási ideje: " + elapsedTime + " másodeperc");
             System.out.println("Generált tranzakciók száma: " + transactionService.findAll().size());
         }
 
-//        fraudContainer.process(currentYear);
+        fraudContainer.process(currentYear);
 
-//        csvHandlerService.writeData("C:\\Temp\\reduced_transaction.csv");
+        csvHandlerService.writeData("C:\\Temp\\creditcard_transactions_10000_records_5_percent_fraud.csv");
 
     }
 }

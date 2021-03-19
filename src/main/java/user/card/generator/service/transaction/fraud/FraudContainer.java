@@ -26,7 +26,7 @@ public class FraudContainer {
         System.out.println("Adott városban elkövetett csalás generálás kezdete.");
         multiplePosPayPassTransactionInSameCity.createFrauds(currentYear);
         Instant endStep2 = Instant.now();
-        elapsedTime = Duration.between(endStep1, endStep2).toMillis();
+        elapsedTime = Duration.between(endStep1, endStep2).toMillis()/1000;
         System.out.println("Adott városban generált csalás tranzakciók előállítási ideje: " + elapsedTime + " másodperc");
     }
 }

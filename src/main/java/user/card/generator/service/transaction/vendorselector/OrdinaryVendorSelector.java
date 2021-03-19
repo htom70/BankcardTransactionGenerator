@@ -35,14 +35,16 @@ public class OrdinaryVendorSelector implements VendorSelector {
         }
         if (!storedCities.contains(currentCity)) {
             storedCities.add(currentCity);
-            vendorsInHomeCity = vendors.parallelStream()
-                    .filter(vendor -> vendor.getCity().equals(currentCity))
-                    .collect(Collectors.toList());
+//            vendorsInHomeCity = vendors.parallelStream()
+//                    .filter(vendor -> vendor.getCity().equals(currentCity))
+//                    .collect(Collectors.toList());
+            vendorsInHomeCity = vendorService.findAllByCity(currentCity);
             vendorsInHomeCityStoredByCity.put(currentCity, vendorsInHomeCity);
 
-            vendorsInForeignCity = vendors.parallelStream()
-                    .filter(vendor -> vendor.getCity().equals(currentCity))
-                    .collect(Collectors.toList());
+//            vendorsInForeignCity = vendors.parallelStream()
+//                    .filter(vendor -> vendor.getCity().equals(currentCity))
+//                    .collect(Collectors.toList());
+            vendorsInForeignCity = vendorService.findAllByCityIsNot(currentCity);
             vendorsInForeignCityStoredByCity.put(currentCity, vendorsInForeignCity);
         }
         vendorsInHomeCity = vendorsInHomeCityStoredByCity.get(currentCity);
