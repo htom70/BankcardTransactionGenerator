@@ -58,7 +58,7 @@ public class RetiredUseCardAndInternetTransaction {
 
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
         Instant start = Instant.now();
-        Random random = new Random(7);
+        Random random = new Random();
         Country country = countryService.findByCountryCode("HU");
         List<City> cities = cityService.findAllByCountry(country);
 

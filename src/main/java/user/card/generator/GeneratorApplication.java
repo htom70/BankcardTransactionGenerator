@@ -89,10 +89,9 @@ public class GeneratorApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Random random = new Random(41);
+        Random random = new Random();
 
-        CurrentYear currentYear = new CurrentYear(2012);
-
+        CurrentYear currentYear = new CurrentYear(2020);
         if (countryService.findAll().isEmpty()) {
             Instant start = Instant.now();
             System.out.println("Országkódok és devizanem generálás kezdete.");

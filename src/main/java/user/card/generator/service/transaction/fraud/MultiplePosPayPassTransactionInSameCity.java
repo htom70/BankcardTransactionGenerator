@@ -45,9 +45,11 @@ public class MultiplePosPayPassTransactionInSameCity {
     public void createFrauds(CurrentYear currentYear) {
         Random random = new Random();
         int numberOfTransaction = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM transaction", Integer.class);
+//        int numberOfFrauds = (int) (numberOfTransaction * 0.002); //10 % csalás
 //        int numberOfFrauds = (int) (numberOfTransaction * 0.001); //5 % csalás
-//        int numberOfFrauds = (int) (numberOfTransaction * 0.0002); //1 % csalás
-        int numberOfFrauds = (int) (numberOfTransaction * 0.0000625); //0.2 % csalás
+        int numberOfFrauds = (int) (numberOfTransaction * 0.0002); //1 % csalás
+//        int numberOfFrauds = (int) (numberOfTransaction * 0.0006); //1 % csalás
+//        int numberOfFrauds = (int) (numberOfTransaction * 0.0000625); //0.2 % csalás
         Country Hungary = countryService.findByCountryCode("HU");
         List<Vendor> activeVendors = vendorService.findAllVendorInNormalTransaction();
         List<City> cities = cityService.findAllByActiveVendors(activeVendors);

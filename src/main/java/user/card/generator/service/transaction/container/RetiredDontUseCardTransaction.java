@@ -32,7 +32,7 @@ public class RetiredDontUseCardTransaction {
     AtmSelector atmSelector;
 
     public void processTransaction(List<Person> people, CurrentYear currentYear, List<City> cities) {
-        Random random = new Random(3);
+        Random random = new Random();
         atmSelector.setHomeRatePercent(100);
         atmSelector.setPrivateBankPercent(100);
         Instant start = Instant.now();

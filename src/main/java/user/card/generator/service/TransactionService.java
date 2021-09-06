@@ -19,9 +19,9 @@ public class TransactionService {
     @Autowired
     VendorRepository vendorRepository;
 
-    @Transactional
     public void saveAll(List<Transaction> transactions) {
         transactionRepository.saveAll(transactions);
+        transactionRepository.flush();
     }
 
     public List<Transaction> findAll() {

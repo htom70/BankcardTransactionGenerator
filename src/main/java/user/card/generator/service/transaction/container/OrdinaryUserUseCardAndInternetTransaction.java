@@ -51,7 +51,7 @@ public class OrdinaryUserUseCardAndInternetTransaction {
     OrdinaryVendorSelector ordinaryVendorSelector;
 
     public void processTransaction(List<Person> people, CurrentYear currentYear) {
-        Random random = new Random(13);
+        Random random = new Random();
         Country country = countryService.findByCountryCode("HU");
         List<City> cities = cityService.findAllByCountry(country);
         Instant start = Instant.now();
